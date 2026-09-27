@@ -160,7 +160,9 @@ async function sendStaticFile(response, pathname) {
   const filePath = resolve(rootDir, normalize(relativePath));
   if (filePath !== rootDir && !filePath.startsWith(`${rootDir}${sep}`)) return sendJson(response, 403, { error: '禁止访问项目目录之外的文件' });
   const body = await readFile(filePath);
-  response.writeHead(200, { 'content-type': contentTypes[extname(filePath).toLowerCase()] || 'application/octet-stream', 'cache-control': 'no-store' });
+  const extension = extname(filePath).toLowerCase();
+  const cacheControl = ['.html', '.js', '.css', '.json'].includes(extension) ? 'no-store' : 'public, max-age=604800';
+  response.writeHead(200, { 'content-type': contentTypes[extension] || 'application/octet-stream', 'cache-control': cacheControl });
   response.end(body);
 }
 

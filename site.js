@@ -124,10 +124,10 @@ function playerMarkup(player, team, stage) {
   const endings = player.endings || [];
   const scoreItems = [...components.ruleItems, ...components.endingItems, ...components.deductions];
   const ledger = `<div class="score-ledger"><span class="ledger-heading">基础与分队计算</span><span class="ledger-rule">游戏结算分</span><b class="ledger-points">${components.base}</b><span class="ledger-rule">${escapeHtml(player.multiplier || '普通')}倍率调整</span><b class="ledger-points ${components.multiplierDelta < 0 ? 'negative' : 'positive'}">${components.multiplierDelta > 0 ? '+' : ''}${components.multiplierDelta}</b>${components.squadBonus ? `<span class="ledger-rule">矛头分队额外加分</span><b class="ledger-points positive">+${components.squadBonus}</b>` : ''}${scoreItems.map(item => `<span class="ledger-heading">${escapeHtml(item.category || '规则项')}</span><span class="ledger-rule">${escapeHtml(item.rule || '')}</span><b class="ledger-points ${Number(item.points) < 0 ? 'negative' : 'positive'}">${Number(item.points) > 0 ? '+' : ''}${Number(item.points || 0)}</b>`).join('')}<span class="ledger-heading">最终得分</span><span class="ledger-rule">本场公开成绩</span><b class="ledger-points">${components.total}</b></div>`;
-  const endingBadges = endings.map(ending => endingAssets[ending] ? `<span class="ending-icon"><img src="${escapeHtml(endingAssets[ending])}" alt="">${escapeHtml(ending)}</span>` : `<span class="ending-icon ending-text">${escapeHtml(ending)}</span>`).join('') || '待录入';
+  const endingBadges = endings.map(ending => endingAssets[ending] ? `<span class="ending-icon"><img src="${escapeHtml(endingAssets[ending])}" alt="" loading="lazy" decoding="async">${escapeHtml(ending)}</span>` : `<span class="ending-icon ending-text">${escapeHtml(ending)}</span>`).join('') || '待录入';
   const squadIcon = squadAssets[player.squad];
-  const squadMarkup = squadIcon ? `<span class="squad-icon"><img src="${escapeHtml(squadIcon)}" alt="">${escapeHtml(player.squad)}</span>` : escapeHtml(player.squad || '待录入');
-  return `<article class="schedule-player-card"><div class="schedule-player-head"><img class="schedule-avatar" src="${escapeHtml(player.avatar)}" alt=""><div><strong>${escapeHtml(player.name)}</strong><span>${escapeHtml(team.name)}</span></div><b>${components.total} 分</b></div><div class="player-detail-grid"><div><small>开局主力</small><strong>${escapeHtml(player.starter || '待录入')}</strong></div><div><small>开局分队</small><strong>${squadMarkup}</strong></div><div><small>完成结局</small><strong class="ending-list">${endingBadges}</strong></div><div><small>提取余额</small><strong>${escapeHtml(player.extractionBalance || '待录入')}</strong></div><div class="detail-wide"><small>干员抓位</small><strong>${escapeHtml(player.recruit || '待录入')}</strong></div></div>${player.lineupImage ? `<figure class="lineup-figure"><figcaption>阵容构筑</figcaption><img src="${escapeHtml(player.lineupImage)}" alt="${escapeHtml(player.name)}阵容构筑"></figure>` : ''}<details class="schedule-score-details"><summary>查看得分详情</summary>${ledger}</details></article>`;
+  const squadMarkup = squadIcon ? `<span class="squad-icon"><img src="${escapeHtml(squadIcon)}" alt="" loading="lazy" decoding="async">${escapeHtml(player.squad)}</span>` : escapeHtml(player.squad || '待录入');
+  return `<article class="schedule-player-card"><div class="schedule-player-head"><img class="schedule-avatar" src="${escapeHtml(player.avatar)}" alt="" loading="lazy" decoding="async"><div><strong>${escapeHtml(player.name)}</strong><span>${escapeHtml(team.name)}</span></div><b>${components.total} 分</b></div><div class="player-detail-grid"><div><small>开局主力</small><strong>${escapeHtml(player.starter || '待录入')}</strong></div><div><small>开局分队</small><strong>${squadMarkup}</strong></div><div><small>完成结局</small><strong class="ending-list">${endingBadges}</strong></div><div><small>提取余额</small><strong>${escapeHtml(player.extractionBalance || '待录入')}</strong></div><div class="detail-wide"><small>干员抓位</small><strong>${escapeHtml(player.recruit || '待录入')}</strong></div></div>${player.lineupImage ? `<figure class="lineup-figure"><figcaption>阵容构筑</figcaption><img src="${escapeHtml(player.lineupImage)}" alt="${escapeHtml(player.name)}阵容构筑" loading="lazy" decoding="async"></figure>` : ''}<details class="schedule-score-details"><summary>查看得分详情</summary>${ledger}</details></article>`;
 }
 
 /** 绘制当前赛段和当前日期的全部参赛选手；每日一场不再使用硬编码首名。 */
@@ -150,10 +150,10 @@ function renderSchedule() {
 function renderRanking() {
   if (!state.teams.length) return;
   const ranked = state.teams.map(team => ({team, ...getTeamScore(team)})).sort((left, right) => right.total - left.total);
-  document.getElementById('rankRows').innerHTML = ranked.map((row, index) => `<div class="team-row"><span class="ranknum">${String(index + 1).padStart(2, '0')}</span><span class="rankteam"><img src="${escapeHtml(row.team.emblem)}" alt=""><b>${escapeHtml(row.team.name)}</b></span><span class="member-scores">${row.team.players.map((player, playerIndex) => `<span class="member-score" title="${escapeHtml(player.name)}" aria-label="${escapeHtml(player.name)}：${Math.round(row.scores[playerIndex])}分"><img src="${escapeHtml(player.avatar)}" alt=""><b>${Math.round(row.scores[playerIndex])}</b></span>`).join('')}</span><span>${row.stage === 'final' ? '决赛分' : '初赛分'}</span><strong class="total">${Math.round(row.total)}</strong></div>`).join('');
+  document.getElementById('rankRows').innerHTML = ranked.map((row, index) => `<div class="team-row"><span class="ranknum">${String(index + 1).padStart(2, '0')}</span><span class="rankteam"><img src="${escapeHtml(row.team.emblem)}" alt="" loading="lazy" decoding="async"><b>${escapeHtml(row.team.name)}</b></span><span class="member-scores">${row.team.players.map((player, playerIndex) => `<span class="member-score" title="${escapeHtml(player.name)}" aria-label="${escapeHtml(player.name)}：${Math.round(row.scores[playerIndex])}分"><img src="${escapeHtml(player.avatar)}" alt="" loading="lazy" decoding="async"><b>${Math.round(row.scores[playerIndex])}</b></span>`).join('')}</span><span>${row.stage === 'final' ? '决赛分' : '初赛分'}</span><strong class="total">${Math.round(row.total)}</strong></div>`).join('');
   const tabs = document.getElementById('scoreTeamTabs');
   if (!selectedScoreTeamId || !state.teams.some(team => team.id === selectedScoreTeamId)) selectedScoreTeamId = state.teams[0]?.id || null;
-  tabs.innerHTML = state.teams.map(team => `<button class="${team.id === selectedScoreTeamId ? 'active' : ''}" data-score-team="${escapeHtml(team.id)}"><img src="${escapeHtml(team.emblem)}" alt="">${escapeHtml(team.name)}</button>`).join('');
+  tabs.innerHTML = state.teams.map(team => `<button class="${team.id === selectedScoreTeamId ? 'active' : ''}" data-score-team="${escapeHtml(team.id)}"><img src="${escapeHtml(team.emblem)}" alt="" loading="lazy" decoding="async">${escapeHtml(team.name)}</button>`).join('');
   tabs.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
     selectedScoreTeamId = button.dataset.scoreTeam;
     renderRanking();
@@ -166,7 +166,7 @@ function renderScoreData() {
   const team = state.teams.find(item => item.id === selectedScoreTeamId);
   if (!team) return;
   const row = getTeamScore(team);
-  document.getElementById('scoreData').innerHTML = `<div class="score-data-card"><header class="score-data-team"><img src="${escapeHtml(team.emblem)}" alt=""><h3>${escapeHtml(team.name)}</h3><span>队伍总分 ${Math.round(row.total)}</span></header>${team.players.map(player => { const components = getScoreComponents(player, row.stage); const modifier = getMultiplier(player).toFixed(2); const extra = components.squadBonus + [...components.ruleItems, ...components.endingItems, ...components.deductions].reduce((sum, item) => sum + Number(item.points || 0), 0); return `<details class="score-data-entry"><summary class="score-data-row"><span class="score-name"><img src="${escapeHtml(player.avatar)}" alt="">${escapeHtml(player.name)}</span><span>${components.base}</span><span>×${modifier}</span><span class="${extra < 0 ? 'negative' : ''}">${extra > 0 ? '+' : ''}${extra}</span><strong>${components.total}</strong></summary><div class="score-data-expanded"><p><b>完成结局：</b>${escapeHtml((player.endings || []).join('、') || '待录入')}</p>${scoreLedgerMarkup(player, row.stage)}</div></details>`; }).join('')}</div>`;
+  document.getElementById('scoreData').innerHTML = `<div class="score-data-card"><header class="score-data-team"><img src="${escapeHtml(team.emblem)}" alt="" loading="lazy" decoding="async"><h3>${escapeHtml(team.name)}</h3><span>队伍总分 ${Math.round(row.total)}</span></header>${team.players.map(player => { const components = getScoreComponents(player, row.stage); const modifier = getMultiplier(player).toFixed(2); const extra = components.squadBonus + [...components.ruleItems, ...components.endingItems, ...components.deductions].reduce((sum, item) => sum + Number(item.points || 0), 0); return `<details class="score-data-entry"><summary class="score-data-row"><span class="score-name"><img src="${escapeHtml(player.avatar)}" alt="" loading="lazy" decoding="async">${escapeHtml(player.name)}</span><span>${components.base}</span><span>×${modifier}</span><span class="${extra < 0 ? 'negative' : ''}">${extra > 0 ? '+' : ''}${extra}</span><strong>${components.total}</strong></summary><div class="score-data-expanded"><p><b>完成结局：</b>${escapeHtml((player.endings || []).join('、') || '待录入')}</p>${scoreLedgerMarkup(player, row.stage)}</div></details>`; }).join('')}</div>`;
 }
 
 /** 将未发布页面替换为不含任何占位数据的筹备中状态。 */
@@ -190,14 +190,26 @@ function showPage(pageId) {
   document.querySelectorAll('.page').forEach(page => page.classList.toggle('active', page.id === pageId));
   document.querySelectorAll('.nav button').forEach(button => button.classList.toggle('active', button.dataset.page === pageId));
   document.querySelector('.nav').classList.remove('open');
-  document.querySelector('.menu-toggle').setAttribute('aria-expanded', 'false');
+  const menuToggle = document.querySelector('.menu-toggle');
+  menuToggle.setAttribute('aria-expanded', 'false');
+  menuToggle.setAttribute('aria-label', '打开导航');
   window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+/** 切换移动端导航菜单，并同步按钮的展开状态和无障碍标签。 */
+function toggleMobileMenu() {
+  const nav = document.querySelector('.nav');
+  const menuToggle = document.querySelector('.menu-toggle');
+  const isOpen = nav.classList.toggle('open');
+  menuToggle.setAttribute('aria-expanded', String(isOpen));
+  menuToggle.setAttribute('aria-label', isOpen ? '关闭导航' : '打开导航');
 }
 
 /** 绑定导航、赛段切换和音乐控制事件。 */
 function bindInteractions() {
   document.querySelectorAll('[data-go]').forEach(button => button.addEventListener('click', () => showPage(button.dataset.go)));
   document.querySelectorAll('[data-link-page]').forEach(link => link.addEventListener('click', event => { event.preventDefault(); showPage(link.dataset.linkPage); }));
+  document.querySelector('.menu-toggle').addEventListener('click', toggleMobileMenu);
   document.querySelectorAll('.nav button').forEach(button => button.addEventListener('click', () => showPage(button.dataset.page)));
   document.querySelectorAll('[data-stage]').forEach(button => button.addEventListener('click', () => {
     currentStage = button.dataset.stage;
