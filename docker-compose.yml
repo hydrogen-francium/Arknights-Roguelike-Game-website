@@ -1,0 +1,12 @@
+services:
+  website:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:3101:3100"
+    volumes:
+      - ./data:/app/data
+      - ./素材/上传:/app/素材/上传
+      - ./backups:/app/backups

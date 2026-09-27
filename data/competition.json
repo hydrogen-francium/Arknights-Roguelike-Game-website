@@ -1,0 +1,498 @@
+{
+  "pages": {
+    "home": true,
+    "rules": true,
+    "schedule": true,
+    "ranking": true
+  },
+  "event": {
+    "shortName": "蟑螂杯#3",
+    "fullName": "第三届皖医蟑螂杯",
+    "description": "蟑螂杯黑流树海主题赛事官网，记录每一支队伍的探索与得分。",
+    "status": "筹备中",
+    "mode": "初赛 · 决赛",
+    "ruleVersion": "S3 / 0.2.2",
+    "audio": "素材/无玄_Dives - theme-1-沉沦者梦呓.mp3"
+  },
+  "rules": {
+    "version": "S3 / 0.2.2",
+    "sections": [
+      {
+        "id": "format",
+        "title": "基础规则",
+        "paragraphs": [
+          "比赛难度：n15。",
+          "比赛分为两个阶段：晋级赛与决赛。"
+        ],
+        "items": [
+          "比赛为团队赛制，共设有五支队伍，每队四名选手；队伍总分为全体队员得分之和。晋级赛中，总积分排名前两名的队伍进入决赛。",
+          "每位选手在初赛进行一场比赛；晋级决赛的两支队伍，其四名选手各进行一场决赛。",
+          "最终排名中，晋级队伍使用决赛分数，其余队伍使用初赛分数，不累计两个阶段分数。",
+          "选手在比赛期间不得与队友、解说席交流。",
+          "严禁使用恶性 Bug 或外挂。若使用疑似 Bug，将由主办方讨论后确定其性质是否为恶性。"
+        ],
+        "callout": "初赛每天一场、每天一名选手；决赛每天一场、每天一名决赛选手。"
+      },
+      {
+        "id": "limits",
+        "title": "限制规则",
+        "paragraphs": [],
+        "items": [
+          "干员限制：除干员“机械师”外，每队每名六星干员只能使用两次，临时招募不计入使用次数。每队可以额外指定一名六星干员作为“精英探索者”，该干员可以被四名选手不限次数使用。",
+          "藏品、加工品、自然物限制：不得主动同时获得藏品“果腹”与藏品“复得之轮”；如被系统强制塞入则可以使用。",
+          "自然物“板腱”必须在获取之后遇到的前两个商店类节点中售出；若未售出，离开第二个商店节点后立即丢弃。",
+          "加工品“遥控器”与“结构性原理”每名选手每局只能使用一个，重复获取则应立即丢弃。",
+          "烧水规则：每位选手第一次在三层及以前死亡可以重开。",
+          "资源管理：全队共享余额上限为 200 点，每名队员可以在局内为队伍存入源石锭，但上限锁定为 200。",
+          "分队限制：队伍中四名队员开局分队不得重复。"
+        ],
+        "callout": ""
+      },
+      {
+        "id": "score",
+        "title": "分数规则",
+        "paragraphs": [
+          "基础计分：即游戏内的结算分。",
+          "最终得分由基础结算分、分队计分、特殊任务、结局和藏品额外分共同构成；当前规则未设置扣分项。"
+        ],
+        "subsections": [
+          {
+            "title": "特殊分队计分",
+            "items": [
+              "文明开化分队：得分 ×1.12。",
+              "多边贸易分队：得分 ×0.88。",
+              "开拓者分队与地质调查分队：得分 ×0.95。",
+              "矛头分队：+100 分。"
+            ]
+          },
+          {
+            "title": "特殊任务计分",
+            "items": [
+              "通关时长小于一个半小时：+50 分。",
+              "临时招募：六星 +50 分；五星及以下 +20 分。",
+              "进入六层时同时携带指定藏品：+150 分。",
+              "进入二结局命运所指前同时携带“沙盘α”与“沙盘β”：+120 分。",
+              "鸭熊鼠狗每击杀一个：+15 分。",
+              "进入〈安眠一隅〉节点：+20 分。",
+              "进入第五层前通关“无效验尸”：+50 分。",
+              "六层得偿所愿提交 3/2/1/0 个藏品：+0/30/60/80 分。",
+              "完美的作战十五层以上：+50 分。",
+              "在〈黑诞〉或追猎中触发并通关指定事件：按规则加分。",
+              "进入六层时持有层数大于等于 5 的“探测先锋”：+100 分。"
+            ]
+          },
+          {
+            "title": "结局加分",
+            "items": [
+              "一结局：80 分。",
+              "五层追猎：160 分。",
+              "二结局：150 分。",
+              "三结局：150 分。",
+              "六层追猎：160 分。"
+            ]
+          },
+          {
+            "title": "藏品加分",
+            "items": [
+              "通关时每携带一个藏品：+5 分。"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "reward",
+        "title": "奖励",
+        "paragraphs": [],
+        "items": [
+          "参与奖：冷门通行证混池一抽。",
+          "第一名队伍：每人 20r。",
+          "第二名队伍：每人 15r。",
+          "第三名队伍：每人 7.99r。",
+          "第四名队伍：每人 3.25r。",
+          "第五名队伍：每人加一抽。"
+        ]
+      }
+    ]
+  },
+  "schedule": {
+    "prelim": [
+      {
+        "date": "11月1日",
+        "label": "初赛 Day1",
+        "playerIds": [
+          "p-1"
+        ]
+      },
+      {
+        "date": "11月2日",
+        "label": "初赛 Day2",
+        "playerIds": [
+          "p-2"
+        ]
+      },
+      {
+        "date": "11月3日",
+        "label": "初赛 Day3",
+        "playerIds": [
+          "p-3"
+        ]
+      },
+      {
+        "date": "11月4日",
+        "label": "初赛 Day4",
+        "playerIds": [
+          "p-4"
+        ]
+      },
+      {
+        "date": "11月5日",
+        "label": "初赛 Day5",
+        "playerIds": [
+          "p-5"
+        ]
+      },
+      {
+        "date": "11月6日",
+        "label": "初赛 Day6",
+        "playerIds": [
+          "p-6"
+        ]
+      },
+      {
+        "date": "11月7日",
+        "label": "初赛 Day7",
+        "playerIds": [
+          "p-7"
+        ]
+      },
+      {
+        "date": "11月8日",
+        "label": "初赛 Day8",
+        "playerIds": [
+          "p-8"
+        ]
+      },
+      {
+        "date": "11月9日",
+        "label": "初赛 Day9",
+        "playerIds": [
+          "p-9"
+        ]
+      },
+      {
+        "date": "11月10日",
+        "label": "初赛 Day10",
+        "playerIds": [
+          "p-10"
+        ]
+      }
+    ],
+    "final": [
+      {
+        "date": "11月11日",
+        "label": "决赛 Day1",
+        "playerIds": [
+          "p-1"
+        ]
+      },
+      {
+        "date": "11月12日",
+        "label": "决赛 Day2",
+        "playerIds": [
+          "p-2"
+        ]
+      },
+      {
+        "date": "11月13日",
+        "label": "决赛 Day3",
+        "playerIds": [
+          "p-3"
+        ]
+      },
+      {
+        "date": "11月14日",
+        "label": "决赛 Day4",
+        "playerIds": [
+          "p-4"
+        ]
+      }
+    ]
+  },
+  "teams": [
+    {
+      "id": "team-1",
+      "name": "区区区求兜队",
+      "emblem": "素材/开拓者分队.png",
+      "players": [
+        {
+          "id": "p-1",
+          "name": "选手甲",
+          "avatar": "素材/6745fcce899aa6ef7030d7e39daa379137804608.png@1052w_!web-dynamic.webp",
+          "prelim": 1380,
+          "final": 1512,
+          "multiplier": "开拓者",
+          "endings": [
+            "痛苦将息",
+            "畸症"
+          ],
+          "starter": "凯尔希",
+          "squad": "矛头分队",
+          "recruit": "棘刺、夜莺、令",
+          "extractionBalance": "待录入",
+          "lineupImage": "素材/F8BFE1BCD99991E455B532388C528159.jpg",
+          "scoreItems": [
+            {
+              "category": "特殊任务加分",
+              "rule": "通关时长小于一个半小时",
+              "points": 50
+            }
+          ],
+          "deductions": []
+        },
+        {
+          "id": "p-2",
+          "name": "选手乙",
+          "avatar": "素材/azXYuTUtKZ.png@2e_90q.webp",
+          "prelim": 1240,
+          "final": 1360,
+          "multiplier": "矛头",
+          "endings": [
+            "畸症"
+          ],
+          "starter": "史尔特尔",
+          "squad": "突击战术分队",
+          "recruit": "黍、缪尔赛思",
+          "extractionBalance": "待录入",
+          "lineupImage": "素材/F8BFE1BCD99991E455B532388C528159.jpg",
+          "scoreItems": [
+            {
+              "category": "特殊任务加分",
+              "rule": "鸭熊鼠狗击杀 2 个",
+              "points": 30
+            }
+          ],
+          "deductions": []
+        }
+      ]
+    },
+    {
+      "id": "team-2",
+      "name": "深潜观测组",
+      "emblem": "素材/地质调查分队.png",
+      "players": [
+        {
+          "id": "p-3",
+          "name": "选手丙",
+          "avatar": "素材/bdbcabe6ce09f44ef3ef56d270feff3537804608.png@1052w_!web-dynamic.webp",
+          "prelim": 1450,
+          "final": 1488,
+          "multiplier": "地质调查",
+          "endings": [
+            "混沌源阶理论"
+          ],
+          "starter": "逻各斯",
+          "squad": "本源研修分队",
+          "recruit": "艾雅法拉、维什戴尔",
+          "extractionBalance": "待录入",
+          "lineupImage": "素材/F8BFE1BCD99991E455B532388C528159.jpg",
+          "scoreItems": [
+            {
+              "category": "特殊任务加分",
+              "rule": "进入〈安眠一隅〉节点",
+              "points": 20
+            },
+            {
+              "category": "特殊任务加分",
+              "rule": "进入第五层前通关「无效验尸」",
+              "points": 20
+            }
+          ],
+          "deductions": []
+        },
+        {
+          "id": "p-4",
+          "name": "选手丁",
+          "avatar": "素材/azXYuTUtKZ.png@2e_90q.webp",
+          "prelim": 1190,
+          "final": 1295,
+          "multiplier": "多边贸易",
+          "endings": [
+            "痛苦将息"
+          ],
+          "starter": "焰影苇草",
+          "squad": "远程战术分队",
+          "recruit": "伊内丝、提丰",
+          "extractionBalance": "待录入",
+          "lineupImage": "素材/F8BFE1BCD99991E455B532388C528159.jpg",
+          "scoreItems": [
+            {
+              "category": "藏品加分",
+              "rule": "通关时携带藏品 4 个",
+              "points": 20
+            }
+          ],
+          "deductions": []
+        }
+      ]
+    },
+    {
+      "id": "team-3",
+      "name": "树海勘察组",
+      "emblem": "素材/堡垒战术分队.png",
+      "players": [
+        {
+          "id": "p-5",
+          "name": "选手戊",
+          "avatar": "素材/6745fcce899aa6ef7030d7e39daa379137804608.png@1052w_!web-dynamic.webp",
+          "prelim": 1320,
+          "final": 0,
+          "multiplier": "堡垒战术",
+          "endings": [
+            "畸症"
+          ],
+          "starter": "黍",
+          "squad": "堡垒战术分队",
+          "recruit": "塞雷娅、夜莺",
+          "extractionBalance": "待录入",
+          "lineupImage": "素材/F8BFE1BCD99991E455B532388C528159.jpg",
+          "scoreItems": [
+            {
+              "category": "特殊任务加分",
+              "rule": "进入〈安眠一隅〉节点",
+              "points": 20
+            }
+          ],
+          "deductions": []
+        },
+        {
+          "id": "p-6",
+          "name": "选手己",
+          "avatar": "素材/bdbcabe6ce09f44ef3ef56d270feff3537804608.png@1052w_!web-dynamic.webp",
+          "prelim": 1160,
+          "final": 0,
+          "multiplier": "多边贸易",
+          "endings": [
+            "痛苦将息"
+          ],
+          "starter": "缪尔赛思",
+          "squad": "多边贸易分队",
+          "recruit": "维什戴尔、逻各斯",
+          "extractionBalance": "待录入",
+          "lineupImage": "素材/F8BFE1BCD99991E455B532388C528159.jpg",
+          "scoreItems": [
+            {
+              "category": "藏品加分",
+              "rule": "通关时携带藏品 2 个",
+              "points": 10
+            }
+          ],
+          "deductions": []
+        }
+      ]
+    },
+    {
+      "id": "team-4",
+      "name": "归航观测组",
+      "emblem": "素材/破坏战术分队.png",
+      "players": [
+        {
+          "id": "p-7",
+          "name": "选手庚",
+          "avatar": "素材/azXYuTUtKZ.png@2e_90q.webp",
+          "prelim": 1270,
+          "final": 0,
+          "multiplier": "破坏战术",
+          "endings": [
+            "混沌源阶理论"
+          ],
+          "starter": "提丰",
+          "squad": "破坏战术分队",
+          "recruit": "凯尔希、伊内丝",
+          "extractionBalance": "待录入",
+          "lineupImage": "素材/F8BFE1BCD99991E455B532388C528159.jpg",
+          "scoreItems": [
+            {
+              "category": "特殊任务加分",
+              "rule": "鸭熊鼠狗击杀 2 个",
+              "points": 30
+            }
+          ],
+          "deductions": []
+        },
+        {
+          "id": "p-8",
+          "name": "选手辛",
+          "avatar": "素材/6745fcce899aa6ef7030d7e39daa379137804608.png@1052w_!web-dynamic.webp",
+          "prelim": 1090,
+          "final": 0,
+          "multiplier": "突击战术",
+          "endings": [
+            "畸症"
+          ],
+          "starter": "夜莺",
+          "squad": "突击战术分队",
+          "recruit": "黍、艾雅法拉",
+          "extractionBalance": "待录入",
+          "lineupImage": "素材/F8BFE1BCD99991E455B532388C528159.jpg",
+          "scoreItems": [],
+          "deductions": []
+        }
+      ]
+    },
+    {
+      "id": "team-5",
+      "name": "深林记录组",
+      "emblem": "素材/文明开化分队.png",
+      "players": [
+        {
+          "id": "p-9",
+          "name": "选手壬",
+          "avatar": "素材/bdbcabe6ce09f44ef3ef56d270feff3537804608.png@1052w_!web-dynamic.webp",
+          "prelim": 1210,
+          "final": 0,
+          "multiplier": "文明开化",
+          "endings": [
+            "痛苦将息"
+          ],
+          "starter": "艾雅法拉",
+          "squad": "文明开化分队",
+          "recruit": "棘刺、提丰",
+          "extractionBalance": "待录入",
+          "lineupImage": "素材/F8BFE1BCD99991E455B532388C528159.jpg",
+          "scoreItems": [
+            {
+              "category": "特殊任务加分",
+              "rule": "进入〈安眠一隅〉节点",
+              "points": 20
+            }
+          ],
+          "deductions": []
+        },
+        {
+          "id": "p-10",
+          "name": "选手癸",
+          "avatar": "素材/azXYuTUtKZ.png@2e_90q.webp",
+          "prelim": 1050,
+          "final": 0,
+          "multiplier": "开拓者",
+          "endings": [
+            "畸症"
+          ],
+          "starter": "伊内丝",
+          "squad": "开拓者分队",
+          "recruit": "逻各斯、黍",
+          "extractionBalance": "待录入",
+          "lineupImage": "素材/F8BFE1BCD99991E455B532388C528159.jpg",
+          "scoreItems": [
+            {
+              "category": "藏品加分",
+              "rule": "通关时携带藏品 2 个",
+              "points": 10
+            }
+          ],
+          "deductions": []
+        }
+      ]
+    }
+  ]
+}

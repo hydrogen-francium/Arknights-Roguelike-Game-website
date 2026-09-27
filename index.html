@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08191d">
+  <meta name="description" content="蟑螂杯#3赛事官网视觉原型">
+  <title>蟑螂杯#3 · 赛事档案</title>
+  <style>
+    :root{color-scheme:dark;--ink:#09191d;--panel:#10282c;--paper:#dce4d1;--paper-ink:#172b2d;--muted:#91a7a2;--mint:#9ee2c9;--gold:#d7c78f;--line:#49615d;--teal:#24534d;--display:"Microsoft YaHei",SimHei,Arial,sans-serif;--sans:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--ink);color:#edf2e8;font-family:var(--sans);min-width:320px}button,a{font:inherit}button{color:inherit}a{color:inherit;text-decoration:none}img{max-width:100%;display:block}.shell{overflow:hidden;position:relative;min-height:100vh}.shell:before{content:"";position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,rgba(5,17,21,.48),rgba(5,17,21,.87)),url("素材/主题图_沉沦者的黑流树海.png") center 12%/cover no-repeat;filter:saturate(.72)}.shell:after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% 10%,transparent 0,rgba(3,12,15,.42) 65%),linear-gradient(90deg,rgba(4,15,18,.35),transparent 18%,transparent 82%,rgba(4,15,18,.35))}
+    .topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(20px,6vw,92px);border-bottom:1px solid #c6d2bb22;background:#071519aa;backdrop-filter:blur(12px);position:sticky;top:0;z-index:10}.brand{display:flex;gap:12px;align-items:center}.brand img{width:82px;height:26px;object-fit:contain}.brand small{display:block;color:#a6b7ad;letter-spacing:.22em;font-size:9px;margin-top:3px}.nav{display:flex;align-items:center;gap:8px}.nav button{border:0;background:transparent;color:#c0cebf;padding:11px 16px;cursor:pointer;font-size:13px;letter-spacing:.08em;transition:.2s}.nav button:hover,.nav button.active{color:var(--mint);background:#9ee2c911}.nav button.active{box-shadow:inset 0 -1px var(--mint)}.menu-toggle{display:none;background:none;border:1px solid #91a7a266;padding:8px 11px}
+    main{width:min(1240px,calc(100% - 40px));margin:0 auto}.page{display:none;animation:rise .45s ease both}.page.active{display:block}@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.eyebrow{font-size:10px;letter-spacing:.28em;color:var(--mint);text-transform:uppercase}.section-title{font:800 clamp(26px,4vw,42px)/1.15 var(--display);letter-spacing:.08em;margin:10px 0 8px}.section-sub{font-size:13px;line-height:1.8;color:#a9bab3;margin:0}.title-rule{display:flex;align-items:center;gap:14px;margin-bottom:30px}.title-rule:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,#b9c98c88,transparent)}
+    .hero{min-height:590px;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:34px;padding:62px 3vw 70px}.hero-copy{position:relative;z-index:1}.seal{display:inline-flex;align-items:center;gap:10px;border:1px solid #b8c89066;padding:8px 13px;color:#c5d4b5;font-size:10px;letter-spacing:.18em;background:#07181c88}.seal:before{content:"";width:6px;height:6px;border-radius:50%;background:#a8e6ce;box-shadow:0 0 12px #a8e6ce}.hero h1{font:800 clamp(50px,8vw,100px)/1.05 var(--display);margin:25px 0 8px;letter-spacing:.09em;text-shadow:0 5px 35px #000}.hero h1 span{display:block;color:var(--paper);font-size:.52em;letter-spacing:.24em;margin-bottom:15px}.hero-en{font:italic 13px var(--display);letter-spacing:.2em;color:#a5c9b9}.hero-desc{max-width:490px;color:#c0ccc3;line-height:1.95;font-size:14px;margin:27px 0}.hero-actions{display:flex;gap:12px;flex-wrap:wrap}.button{border:1px solid #bbca9a88;padding:13px 20px;background:#1e4942;color:#eef3e6;cursor:pointer;letter-spacing:.12em;font-size:12px;transition:.2s}.button:hover{background:#326359;transform:translateY(-2px)}.button.secondary{background:#08191dcc;border-color:#82989066}.hero-art{position:relative;min-height:420px;display:grid;place-items:center}.hero-art:before{content:"";position:absolute;width:min(37vw,440px);aspect-ratio:1;border:1px solid #b7cc9b33;border-radius:50%;box-shadow:0 0 90px #62cdb81b,inset 0 0 80px #62cdb811}.hero-art:after{content:"";position:absolute;width:min(31vw,360px);aspect-ratio:1;border:1px dashed #c3d1a444;border-radius:50%;animation:spin 50s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.hero-art img{width:min(78%,500px);height:auto;filter:drop-shadow(0 20px 35px #0009);position:relative;z-index:1}.hero-art .art-tag{position:absolute;bottom:7%;right:4%;font-size:10px;letter-spacing:.2em;color:#aebdb0;writing-mode:vertical-rl}
+    .statusline{border-top:1px solid #b6c99933;border-bottom:1px solid #b6c99933;display:grid;grid-template-columns:repeat(3,1fr);background:#071519a8;margin:0 0 86px}.statusline div{padding:20px 26px;border-right:1px solid #b6c99924}.statusline div:last-child{border:0}.statusline span{display:block;color:#8ea69e;font-size:10px;letter-spacing:.16em;margin-bottom:8px}.statusline strong{font:20px var(--display);font-weight:500;color:#e1e8d9}.home-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;margin-bottom:90px}.feature-card{padding:26px;border:1px solid #a9bd9450;background:linear-gradient(140deg,#dce4d1 0%,#bfcbb7 100%);color:var(--paper-ink);min-height:220px;position:relative}.feature-card.dark{background:#10282ce8;color:#edf2e8;border-color:#7e9a8c55}.feature-card h2{font:25px var(--display);margin:9px 0 14px}.feature-card p{line-height:1.8;color:inherit;opacity:.76;font-size:13px;max-width:580px}.feature-card .mini-link{display:inline-block;margin-top:10px;font-size:11px;letter-spacing:.12em;color:#31675a}.dark .mini-link{color:var(--mint)}.feature-card .corner{position:absolute;right:20px;top:20px;color:#698074;font-size:11px;letter-spacing:.16em}.quicklinks{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:100px}.quicklink{background:#0b2024e8;border:1px solid #849c8b44;padding:21px;min-height:140px;transition:.2s}.quicklink:hover{border-color:#9ee2c9aa;transform:translateY(-3px)}.quicklink span{color:var(--mint);font:italic 13px var(--display)}.quicklink h3{font:20px var(--display);margin:18px 0 7px}.quicklink p{font-size:11px;color:#9aada4;margin:0}
+    .inner-page{padding:68px 0 100px;min-height:calc(100vh - 140px)}.paper{background:var(--paper);color:var(--paper-ink);border:1px solid #edf0d9;padding:clamp(20px,4vw,48px);box-shadow:12px 12px 0 #192a26,16px 16px 0 #c0bd9270;position:relative}.paper:before{content:"";position:absolute;inset:10px;border:1px solid #72827838;pointer-events:none}.paper h2,.paper h3{font-family:var(--display)}.schedule-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:24px}.day-tabs,.stage-tabs{display:flex;gap:8px;flex-wrap:wrap}.day-tabs button,.stage-tabs button{border:1px solid #52676055;background:#aab8a8;color:#243b3a;padding:10px 14px;cursor:pointer;font-size:12px}.day-tabs button.active,.stage-tabs button.active{background:#254c47;color:#e2ead8;border-color:#254c47}.day-note{font-size:12px;color:#5b6d67;margin-top:12px}.match-card{margin-top:22px;border:1px solid #85948b;background:#eef0e5}.match-top{display:flex;justify-content:space-between;align-items:center;padding:13px 17px;background:#324e4b;color:#edf2e8}.match-top strong{font:16px var(--display);letter-spacing:.08em}.match-top span{font-size:11px;color:#c2d2c2}.player-row{display:grid;grid-template-columns:minmax(130px,1.1fr) repeat(4,minmax(90px,1fr)) auto;align-items:center;gap:12px;padding:16px;border-bottom:1px solid #b8c2b4}.player-row:last-child{border:0}.player-id{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:650}.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #768e7e;background:#d4ded0}.metric small{display:block;color:#687c73;font-size:9px;margin-bottom:5px;letter-spacing:.06em}.metric strong{font-size:13px}.score{color:#217665}.expand{border:1px solid #698077;background:transparent;color:#304a44;padding:8px 10px;font-size:11px;cursor:pointer}.detail-row{display:none;padding:16px;background:#d1dbcb;grid-template-columns:repeat(4,1fr);gap:12px}.detail-row.open{display:grid}.detail-chip{padding:12px;background:#e8ecdf;border-left:2px solid #568779}.detail-chip small{display:block;color:#65766c;font-size:10px;margin-bottom:7px}.detail-chip strong{font-size:12px}.table-wrap{overflow-x:auto}.rank-head,.team-row{display:grid;grid-template-columns:70px minmax(150px,1.2fr) minmax(260px,2fr) 120px 120px;gap:12px;align-items:center;min-width:730px}.rank-head{padding:12px 16px;color:#dfe8d6;background:#213b39;font-size:11px;letter-spacing:.1em}.team-row{padding:18px 16px;background:#edf0e5;border-bottom:1px solid #c1cabe}.team-row:nth-child(even){background:#e2e8da}.ranknum{font:24px var(--display);color:#608477}.rankteam{display:flex;align-items:center;gap:12px;font-weight:700}.rankteam img{width:38px;height:38px;object-fit:contain}.member-scores{display:flex;gap:8px;flex-wrap:wrap}.member-score{background:#d1ddd0;padding:7px 9px;font-size:10px;white-space:nowrap}.member-score b{color:#285f55;margin-left:4px}.total{font:23px var(--display);color:#247b68}.rank-caption{font-size:10px;color:#a9bab3;margin:14px 0 0}.rules-layout{display:grid;grid-template-columns:260px 1fr;gap:25px;align-items:start}.rules-nav{position:sticky;top:96px;background:#0b2024;border:1px solid #91a88c55;padding:18px}.rules-nav strong{display:block;color:var(--mint);font:18px var(--display);margin-bottom:12px}.rules-nav a{display:block;padding:9px 0;color:#b3c3ba;border-bottom:1px solid #b1c3b31c;font-size:12px}.rules-content{display:grid;gap:18px}.rule-block{background:var(--paper);color:#263c39;padding:25px;border:1px solid #e5ead9;scroll-margin-top:95px}.rule-block h2{font:24px var(--display);margin:0 0 15px}.rule-block p,.rule-block li{font-size:13px;line-height:1.9}.rule-block li{margin:5px 0}.rule-callout{padding:13px 16px;background:#d0dbca;border-left:3px solid #50867a;font-size:12px;line-height:1.8}.placeholder{color:#65766e}.footer{border-top:1px solid #b3c59c33;padding:26px 20px;text-align:center;color:#82968d;font-size:10px;letter-spacing:.1em}.footer img{width:82px;height:26px;object-fit:contain;margin:0 auto 12px;opacity:.72}
+    .detail-row{display:grid}.score-detail-card{background:#273b39;color:#edf2e8;border:1px solid #49655e;box-shadow:8px 8px 0 #19302d;margin-top:22px;padding:18px}.score-detail-head{display:flex;align-items:center;gap:14px;border-bottom:1px solid #6e8e7b55;padding-bottom:16px}.score-detail-head .avatar{width:56px;height:56px}.score-detail-head h3{margin:0 0 4px;font:700 22px var(--display)}.score-detail-head p{margin:0;color:#a8c0b4;font-size:12px}.score-detail-total{margin-left:auto;text-align:right}.score-detail-total small{display:block;color:#9bb4a5;font-size:10px}.score-detail-total strong{font:800 30px var(--display);color:var(--mint)}.detail-layout{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.detail-block{background:#324b47;padding:13px 14px;min-height:82px}.detail-block small,.score-breakdown small{display:block;color:#9eb7a9;font-size:10px;margin-bottom:7px}.detail-block strong{font-size:15px}.ending-badge{display:inline-flex;align-items:center;gap:7px}.ending-badge img{width:25px;height:25px;object-fit:contain}.lineup-panel{grid-column:1/-1;background:#1e3432;padding:14px}.lineup-panel h4{margin:0 0 10px;color:#c4d6bd;font:700 14px var(--display)}.lineup-image-placeholder{min-height:102px;border:1px dashed #86a79a;background:linear-gradient(135deg,#294640,#1d302f);display:grid;place-items:center;text-align:center;color:#acc2b3;font-size:12px;letter-spacing:.08em}.score-breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border-top:1px solid #71948755;margin-top:15px;padding-top:15px}.score-breakdown div{background:#324b47;padding:12px;text-align:center}.score-breakdown strong{font:700 20px var(--display);color:#f3f1dc}.score-breakdown .final-score strong{color:var(--mint)}.score-data-section{margin-top:34px;border-top:1px solid #8c9b8b66;padding-top:25px}.section-divider{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:15px}.section-divider span{font:800 24px var(--display)}.section-divider small{color:#687b70;font-size:11px}.score-team-tabs{display:flex;gap:8px;overflow:auto;padding-bottom:12px}.score-team-tabs button{border:1px solid #60736b;background:#b8c5b6;color:#29403b;padding:10px 14px;white-space:nowrap;cursor:pointer;font-size:12px}.score-team-tabs button.active{background:#28534b;color:#edf2e8;border-color:#28534b}.score-data-card{background:#d4ded0;border:1px solid #87968a;padding:15px}.score-data-team{display:flex;align-items:center;gap:12px;border-bottom:1px solid #92a095;padding-bottom:12px;margin-bottom:12px}.score-data-team img{width:42px;height:42px;object-fit:contain}.score-data-team h3{margin:0;font:700 20px var(--display)}.score-data-team span{margin-left:auto;font:700 24px var(--display);color:#257867}.score-data-row{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:10px;align-items:center;background:#e7ece2;border-bottom:1px solid #b7c3b6;padding:12px}.score-data-row.head{background:#31514b;color:#e9efe4;font-size:11px}.score-data-row:not(.head){font-size:12px}.score-data-row strong{font-size:16px;color:#267767}.score-data-row .score-name{display:flex;align-items:center;gap:8px;font-weight:700}.score-data-row .score-name img{width:34px;height:34px;border-radius:50%;object-fit:cover}.rank-caption{margin-top:14px}.ranking-section .table-wrap{border:1px solid #a2afa2}.ranking-section .team-row{background:linear-gradient(90deg,#d9e2d4,#eef0e5)}.ranking-section .team-row:nth-child(even){background:linear-gradient(90deg,#cbd8cc,#e2e8da)}
+    @media(max-width:800px){.topbar{height:62px;padding:0 18px}.menu-toggle{display:block}.nav{display:none;position:absolute;top:61px;left:0;right:0;padding:10px 18px 16px;background:#071519f5;border-bottom:1px solid #b6c99933;flex-direction:column;align-items:stretch}.nav.open{display:flex}.nav button{text-align:left}.hero{grid-template-columns:1fr;min-height:unset;padding:72px 4vw 35px;gap:0}.hero-art{min-height:300px;grid-row:1}.hero-art img{width:min(70%,420px)}.hero-art:before{width:min(70vw,330px)}.hero-art:after{width:min(60vw,280px)}.hero-copy{text-align:center}.hero-desc{margin-left:auto;margin-right:auto}.hero-actions{justify-content:center}.statusline{margin-bottom:55px}.home-grid{grid-template-columns:1fr;margin-bottom:55px}.quicklinks{grid-template-columns:1fr;margin-bottom:60px}.quicklink{min-height:unset}.inner-page{padding-top:44px}.rules-layout{grid-template-columns:1fr}.rules-nav{position:static;display:flex;gap:12px;align-items:center;overflow:auto}.rules-nav strong{white-space:nowrap;margin:0}.rules-nav a{white-space:nowrap;border:0}.player-row{grid-template-columns:1fr 1fr 1fr;gap:14px}.player-id{grid-column:span 2}.expand{grid-column:3;grid-row:1}.detail-row{grid-template-columns:1fr 1fr}.schedule-head{display:block}.day-tabs{margin-top:18px}.detail-layout{grid-template-columns:1fr 1fr}.score-breakdown{grid-template-columns:1fr 1fr}.score-data-row{grid-template-columns:1.3fr repeat(4,1fr);min-width:640px}.score-data-card{overflow-x:auto}}
+    @media(max-width:480px){main{width:min(100% - 26px,1240px)}.hero{padding-top:46px}.hero-art{min-height:245px}.hero h1{font-size:54px}.hero-desc{font-size:13px}.statusline div{padding:14px 10px}.statusline strong{font-size:15px}.statusline span{font-size:8px}.feature-card{padding:21px}.paper{padding:18px 14px;box-shadow:7px 7px 0 #192a26,10px 10px 0 #c0bd9270}.day-tabs button{padding:8px 10px}.player-row{padding:13px 10px;gap:10px}.metric strong{font-size:12px}.detail-chip{padding:10px}.detail-row{gap:8px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+  <style>
+    .score-detail-card{background:#263b38;color:#edf2e8;border:1px solid #688078;box-shadow:8px 8px 0 #1b302c;margin-top:22px;padding:18px}.score-detail-head{display:flex;align-items:center;gap:14px;border-bottom:1px solid #6e8e7b55;padding-bottom:16px}.score-detail-head .avatar{width:56px;height:56px}.score-detail-head h3{margin:0 0 4px;font:700 22px var(--display)}.score-detail-head p{margin:0;color:#a8c0b4;font-size:12px}.score-detail-total{margin-left:auto;text-align:right}.score-detail-total small{display:block;color:#9bb4a5;font-size:10px}.score-detail-total strong{font:800 30px var(--display);color:var(--mint)}.detail-layout{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}.detail-block{background:#324b47;padding:13px 14px;min-height:82px}.detail-block small,.score-breakdown small{display:block;color:#9eb7a9;font-size:10px;margin-bottom:7px}.detail-block strong{font-size:15px}.ending-badge{display:inline-flex;align-items:center;gap:7px}.ending-badge img{width:25px;height:25px;object-fit:contain}.lineup-panel{grid-column:1/-1;background:#1e3432;padding:14px}.lineup-panel h4{margin:0 0 10px;color:#c4d6bd;font:700 14px var(--display)}.lineup-image-placeholder{min-height:102px;border:1px dashed #86a79a;background:linear-gradient(135deg,#294640,#1d302f);display:grid;place-items:center;text-align:center;color:#acc2b3;font-size:12px;letter-spacing:.08em}.score-breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;border-top:1px solid #71948755;margin-top:15px;padding-top:15px}.score-breakdown div{background:#324b47;padding:12px;text-align:center}.score-breakdown strong{font:700 20px var(--display);color:#f3f1dc}.score-breakdown .final-score strong{color:var(--mint)}.point-details{margin-top:15px;border-top:1px solid #71948755;padding-top:13px}.point-details summary{cursor:pointer;color:#c7d8ca;font-size:12px}.point-details>div,.score-expanded{display:grid;grid-template-columns:1fr auto;gap:9px;padding:13px;background:#1d302e;margin-top:10px;font-size:12px}.point-details b,.score-expanded b{color:var(--mint)}.formula-note{color:#aabdb1;font-size:10px;line-height:1.7;margin:12px 0 0}.score-data-section{margin-top:34px;border-top:1px solid #8c9b8b66;padding-top:25px}.section-divider{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:15px}.section-divider span{font:800 24px var(--display)}.section-divider small{color:#687b70;font-size:11px}.score-team-tabs{display:flex;gap:8px;overflow:auto;padding-bottom:12px}.score-team-tabs button{display:flex;align-items:center;gap:8px;border:1px solid #60736b;background:#b8c5b6;color:#29403b;padding:10px 14px;white-space:nowrap;cursor:pointer;font-size:12px}.score-team-tabs button img{width:24px;height:24px;object-fit:contain}.score-team-tabs button.active{background:#28534b;color:#edf2e8;border-color:#28534b}.score-data-card{background:#d4ded0;border:1px solid #87968a;padding:15px}.score-data-team{display:flex;align-items:center;gap:12px;border-bottom:1px solid #92a095;padding-bottom:12px;margin-bottom:12px}.score-data-team img{width:42px;height:42px;object-fit:contain}.score-data-team h3{margin:0;font:700 20px var(--display)}.score-data-team span{margin-left:auto;font:700 24px var(--display);color:#257867}.score-data-row{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:10px;align-items:center;background:#e7ece2;border-bottom:1px solid #b7c3b6;padding:12px;width:100%;text-align:left}.score-data-row.head{background:#31514b;color:#e9efe4;font-size:11px}.score-data-row:not(.head){font-size:12px}.score-data-row strong{font-size:16px;color:#267767}.score-data-row .score-name{display:flex;align-items:center;gap:8px;font-weight:700}.score-data-row .score-name img{width:34px;height:34px;border-radius:50%;object-fit:cover}.score-data-entry summary{list-style:none;cursor:pointer}.score-data-entry summary::-webkit-details-marker{display:none}.ranking-section .table-wrap{border:1px solid #a2afa2}.ranking-section .team-row{background:linear-gradient(90deg,#d9e2d4,#eef0e5)}.ranking-section .team-row:nth-child(even){background:linear-gradient(90deg,#cbd8cc,#e2e8da)}
+    @media(max-width:800px){.detail-layout{grid-template-columns:1fr 1fr}.score-breakdown{grid-template-columns:1fr 1fr}.score-data-card{overflow-x:auto}.score-data-row{grid-template-columns:1.3fr repeat(4,1fr);min-width:640px}.score-data-team{min-width:600px}}
+    @media(max-width:480px){.score-detail-card{padding:12px}.score-detail-head h3{font-size:18px}.detail-layout{grid-template-columns:1fr}.lineup-panel{grid-column:auto}.score-breakdown{gap:6px}.score-breakdown div{padding:9px 5px}.score-breakdown strong{font-size:16px}.section-divider{display:block}.section-divider small{display:block;margin-top:6px}}
+  </style>
+  <style>
+    .music-control{display:flex;align-items:center;gap:8px;color:#afc2b5;font-size:11px;letter-spacing:.06em}.music-control button{border:1px solid #91a7a266;background:#102c2d;color:#d9e7d8;padding:8px 11px;cursor:pointer}.music-control button:hover{border-color:var(--mint);color:var(--mint)}.member-scores{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.member-score{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:60px}.member-score img{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid #759b8e}.member-score b{font-size:13px;color:#267767}.squad-badge{display:inline-flex;align-items:center;gap:7px}.squad-badge img{width:27px;height:27px;object-fit:contain}.lineup-image{border:1px solid #86a79a;background:#182c2b;padding:8px;overflow:hidden}.lineup-image img{width:100%;max-height:280px;object-fit:contain}.ending-list{display:flex;justify-content:flex-end;align-items:center;gap:6px;flex-wrap:wrap}.ending-inline{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}.ending-inline img{width:24px;height:24px;object-fit:contain}.score-expanded .ending-list{grid-column:1/-1;justify-content:flex-start}.score-ledger{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 18px;padding:14px;background:#e8ecdf;border-top:1px solid #bcc8b8;font-size:12px}.score-ledger b{text-align:right}.score-ledger .ledger-heading{grid-column:1/-1;color:#536b60;font-size:11px;letter-spacing:.08em;margin-top:7px}.score-ledger .ledger-heading:first-child{margin-top:0}.score-ledger .ledger-rule{color:#62736a;min-width:0}.score-ledger .ledger-points{font-variant-numeric:tabular-nums;white-space:nowrap}.score-ledger .ledger-entry{display:contents}.score-ledger .negative{color:#a34039}.score-ledger .positive{color:#247b68}
+    @media(max-width:800px){.brand small{display:none}.brand img{width:76px}.topbar{gap:10px}.music-control{margin-left:auto}.music-control span{display:none}.music-control button{padding:8px 9px;font-size:11px}.menu-toggle{flex:0 0 auto}.member-score{min-width:48px}.member-score img{width:42px;height:42px}.score-ledger{grid-template-columns:minmax(0,1fr) auto;gap:7px 10px}}
+  </style>
+  <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="schedule-icons.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="回到首页"><img src="素材/图标_沉沦者的黑流树海.png" alt="沉沦者的黑流树海"><span><small>INTEGRATED STRATEGIES · COMPETITION ARCHIVE</small></span></a>
+      <div class="music-control"><button id="musicToggle" type="button" aria-pressed="false">播放音乐</button><span>沉沦者梦呓</span></div>
+      <button class="menu-toggle" aria-label="打开导航" aria-expanded="false">菜单</button>
+      <nav class="nav" aria-label="主要导航">
+        <button class="active" data-page="home">赛事首页</button>
+        <button data-page="rules">比赛规则</button>
+        <button data-page="schedule">选手与日程</button>
+      <button data-page="ranking">排名与积分</button>
+      </nav>
+    </header>
+    <audio id="themeAudio" src="素材/无玄_Dives - theme-1-沉沦者梦呓.mp3" autoplay loop preload="auto"></audio>
+    <main>
+      <section class="page active" id="home">
+        <div class="hero">
+          <div class="hero-copy">
+            <span class="seal">蟑螂杯#3 · 赛事筹备中</span>
+            <h1><span>第三届皖医蟑螂杯</span>蟑螂杯#3</h1>
+            <div class="hero-en">COCKROACH CUP #3 · OFFICIAL ARCHIVE</div>
+            <p class="hero-desc">蟑螂杯黑流树海主题赛事官网，记录每一支队伍的探索与得分。</p>
+            <div class="hero-actions"><button class="button" data-go="schedule">查看比赛日程　↗</button><button class="button secondary" data-go="ranking">浏览队伍排名</button></div>
+          </div>
+          <div class="hero-art"><img src="素材/主题标题.png" alt="沉沦者的黑流树海主题标题"><span class="art-tag">ACTIVITY ARCHIVE / 03</span></div>
+        </div>
+        <div class="statusline"><div><span>赛事状态</span><strong>筹备中</strong></div><div><span>比赛模式</span><strong>初赛 · 决赛</strong></div><div><span>规则版本</span><strong>S3　/　0.2.2</strong></div></div>
+        <div class="home-grid">
+          <article class="feature-card"><span class="corner">01 / FIELD GUIDE</span><div class="eyebrow">赛事说明</div><h2>在黑流树海中，留下队伍的记录</h2><p>蟑螂杯#3以《明日方舟》集成战略活动「沉沦者的黑流树海」为基础，并采用本届赛事规则。比赛分为初赛与决赛，最终队伍排名依据各队适用赛段的成绩确定。</p><a class="mini-link" href="#rules" data-link-page="rules">阅读比赛规则　→</a></article>
+          <article class="feature-card dark"><span class="corner">02 / NEXT RECORD</span><div class="eyebrow">近期日程</div><h2>赛程安排即将公布</h2><p>比赛日期、当日参赛选手与每场成绩详情将在赛程确定后更新。</p><a class="mini-link" href="#schedule" data-link-page="schedule">查看选手与日程　→</a></article>
+        </div>
+        <div class="title-rule"><div><div class="eyebrow">EXPLORE</div><h2 class="section-title">赛事档案</h2></div></div>
+        <div class="quicklinks"><a class="quicklink" href="#rules" data-link-page="rules"><span>01 / RULES</span><h3>比赛规则</h3><p>赛制、分数与晋级办法</p></a><a class="quicklink" href="#schedule" data-link-page="schedule"><span>02 / SCHEDULE</span><h3>选手与日程</h3><p>按比赛日期查看参赛阵容</p></a><a class="quicklink" href="#ranking" data-link-page="ranking"><span>03 / STANDING</span><h3>队伍排名</h3><p>队伍总分与成员成绩</p></a></div>
+      </section>
+      <section class="page inner-page" id="rules">
+        <div class="title-rule"><div><div class="eyebrow">RULEBOOK / S3 · V0.2.2</div><h1 class="section-title">比赛规则</h1><p class="section-sub">蟑螂杯#3 · 第三届皖医蟑螂杯 · 沉沦者的黑流树海</p></div></div>
+        <div class="rules-layout"><aside class="rules-nav"><strong>规则索引</strong><a href="#rule-format">基础规则</a><a href="#rule-limits">限制规则</a><a href="#rule-score">分数规则</a><a href="#rule-reward">奖励</a></aside>
+          <div class="rules-content">
+            <article class="rule-block" id="rule-format"><h2>基础规则</h2><p class="rule-version">蟑螂杯 S3　/　V0.2.2</p><ul><li>比赛难度：n15。</li><li>比赛分为两个阶段：晋级赛与决赛。</li><li>比赛为团队赛制，共设有五支队伍，每队四名选手；队伍总分为全体队员得分之和。晋级赛中，总积分排名前两名的队伍进入决赛。</li><li>选手在比赛期间不得与队友、解说席交流。</li><li>严禁使用恶性 Bug 或外挂。若使用疑似 Bug，将由主办方讨论后确定其性质是否为恶性。</li></ul><div class="rule-callout">当前赛制数据：每位选手初赛一场；晋级决赛的两支队伍，其选手各进行一场决赛。最终排名中，晋级队伍使用决赛分数，其余队伍使用初赛分数，不累计两个阶段分数。</div></article>
+          <article class="rule-block" id="rule-limits"><h2>限制规则</h2><ul><li><strong>干员限制：</strong>除干员“机械师”外，每队每名六星干员只能使用两次，临时招募不计入使用次数。除此之外，每队可以额外指定一名六星干员作为“精英探索者”，该干员可以被四名选手不限次数使用。出现在临时招募或应急助力中的干员不受抓取限制约束。</li><li><strong>藏品、加工品、自然物限制：</strong>不得主动同时获得藏品“果腹”与藏品“复得之轮”；无论以何种途径获得其中一个，不能主动获得另一个，如被系统强制塞入则可以使用。</li><li>自然物“板腱”必须在获取之后遇到的前两个商店类节点中售出。注意不是立即售出，在遇到的前两个商店节点中可以自由规划售出时机；如果未在这两个商店节点售出，则必须在离开第二个商店节点后立即将该自然物丢弃。</li><li>加工品“遥控器”与“结构性原理”每名选手每局只能使用一个，重复获取则应立即丢弃。</li><li><strong>烧水规则：</strong>每位选手第一次在三层及以前死亡可以重开。</li><li><strong>资源管理：</strong>全队共享余额上限为 200 点，每名队员可以在局内为队伍存入源石锭（烧水时也可以存），但上限锁定为 200。</li><li><strong>分队限制：</strong>队伍中四名队员开局分队不得重复。</li></ul></article>
+            <article class="rule-block" id="rule-score"><h2>分数规则</h2><p><strong>基础计分：</strong>即游戏内的结算分。</p><h3>特殊分队计分</h3><ul><li>使用文明开化分队开局的选手得分 ×1.12。</li><li>使用多边贸易分队的选手得分 ×0.88。</li><li>使用开拓者分队与地质调查分队的选手得分 ×0.95。</li><li>使用矛头分队开局 +100 分。</li></ul><h3>特殊任务计分</h3><ol><li>通关时长小于一个半小时：+50 分。</li><li>临时招募：六星 +50 分；五星及以下 +20 分。</li><li>在进入六层时同时携带「击坠“神明”」「淹没“光明”」「焚毁“文明”」：+150 分。</li><li>在进入二结局命运所指前同时携带「沙盘α」与「沙盘β」：+120 分。</li><li>鸭熊鼠狗每击杀一个：+15 分。若击杀对象为“空值体”，则按击杀时形态计算。</li><li>进入〈安眠一隅〉节点：+20 分。</li><li>进入第五层前通关“无效验尸”：+50 分。</li><li>六层得偿所愿提交 3/2/1/0 个藏品：+0/30/60/80 分。</li><li>完美的作战十五层以上：+50 分。</li><li>在〈黑诞〉或追猎中触发并通关“闹乐”/“灭身”/“纵怒”：+20/50/50 分。</li><li>进入六层时持有层数大于等于 5 的「探测先锋」：+100 分。</li></ol><h3>结局加分</h3><ul><li>一结局：80 分。</li><li>五层追猎：160 分。</li><li>二结局：150 分。</li><li>三结局：150 分。</li><li>六层追猎：160 分。</li></ul><h3>藏品加分</h3><p>通关时每携带一个藏品：+5 分。</p><div class="rule-callout">最终得分由基础结算分、分队计分与各项特殊任务、结局、藏品额外分共同构成；当前规则未设置扣分项。</div></article>
+            <article class="rule-block" id="rule-reward"><h2>奖励</h2><ul><li>参与奖：冷门通行证混池一抽。</li><li>第一名队伍：每人 20r。</li><li>第二名队伍：每人 15r。</li><li>第三名队伍：每人 7.99r。</li><li>第四名队伍：每人 3.25r。</li><li>第五名队伍：每人加一抽。</li></ul><div class="rule-callout">以上文本由当前规则图转录；规则文本后续会迁移为后台可编辑内容。</div></article>
+          </div>
+        </div>
+      </section>
+      <section class="page inner-page" id="schedule">
+        <div class="title-rule"><div><div class="eyebrow">ROUTE / DAILY LOG</div><h1 class="section-title">选手与日程</h1><p class="section-sub">赛事日程安排和选手详细数据</p></div></div>
+        <div class="paper"><div class="schedule-head"><div><h2 style="font-size:26px;margin:0 0 7px">赛事日程</h2><div class="day-note">按日期查看当日参赛选手与完整得分详情。</div></div><div class="stage-tabs"><button class="active" data-stage="prelim">初赛</button><button data-stage="final">决赛</button></div></div><div class="day-tabs" id="dayTabs"></div><div id="scheduleContent"></div></div>
+      </section>
+      <section class="page inner-page" id="ranking">
+        <div class="title-rule"><div><div class="eyebrow">STANDINGS / SCORE ARCHIVE</div><h1 class="section-title">排名与积分</h1><p class="section-sub">队伍与选手的排名数据</p></div></div>
+        <div class="paper ranking-paper"><section class="ranking-section"><div class="schedule-head"><div><h2 style="font-size:26px;margin:0 0 7px">队伍排名</h2><div class="day-note">排名页保留队伍、成员分数与总分，详细构成移至下方积分数据。</div></div><div class="stage-tabs"><button class="active" data-rank-mode="current">最终排名</button><button data-rank-mode="prelim">初赛排名</button></div></div><div class="table-wrap"><div class="rank-head"><span>排名</span><span>队伍</span><span>成员得分</span><span>计分赛段</span><span>队伍总分</span></div><div id="rankRows"></div></div></section><section class="score-data-section"><div class="section-divider"><span>积分数据</span><small>点击队伍查看成员的逐项得分</small></div><div class="score-team-tabs" id="scoreTeamTabs"></div><div id="scoreData"></div></section></div>
+      </section>
+    </main>
+    <footer class="footer"><img src="素材/图标_沉沦者的黑流树海.png" alt=""><div>第三届皖医蟑螂杯 · 本地视觉原型 · 赛事信息以正式公告为准</div></footer>
+  </div>
+  <script type="module" src="site.js"></script><!-- 旧演示脚本已拆分到 site.js，以下内容仅保留为迁移记录，不参与页面执行。
+    const demoRoster = [
+      { team: '远征记录组', emblem: '素材/开拓者分队.png', players: [{name:'选手甲',avatar:'素材/6745fcce899aa6ef7030d7e39daa379137804608.png@1052w_!web-dynamic.webp',prelim:1380,final:1512,multiplier:'开拓者',ending:'痛苦将息',endings:['痛苦将息','畸症'],starter:'凯尔希',squad:'矛头分队',recruit:'棘刺、夜莺、令',scoreItems:[{category:'特殊任务加分',rule:'通关时长小于一个半小时',points:50}]},{name:'选手乙',avatar:'素材/azXYuTUtKZ.png@2e_90q.webp',prelim:1240,final:1360,multiplier:'矛头',ending:'畸症',starter:'史尔特尔',squad:'突击战术分队',recruit:'黍、缪尔赛思',scoreItems:[{category:'特殊任务加分',rule:'鸭熊鼠狗击杀 2 个',points:30}]}]},
+      { team: '深潜观测组', emblem: '素材/地质调查分队.png', players: [{name:'选手丙',avatar:'素材/bdbcabe6ce09f44ef3ef56d270feff3537804608.png@1052w_!web-dynamic.webp',prelim:1450,final:1488,multiplier:'地质调查',ending:'混沌源阶理论',starter:'逻各斯',squad:'本源研修分队',recruit:'艾雅法拉、维什戴尔',scoreItems:[{category:'特殊任务加分',rule:'进入〈安眠一隅〉节点',points:20},{category:'特殊任务加分',rule:'进入第五层前通关「无效验尸」',points:20}]},{name:'选手丁',avatar:'素材/azXYuTUtKZ.png@2e_90q.webp',prelim:1190,final:1295,multiplier:'多边贸易',ending:'痛苦将息',starter:'焰影苇草',squad:'远程战术分队',recruit:'伊内丝、提丰',scoreItems:[{category:'藏品加分',rule:'通关时携带藏品 4 个',points:20}]}]},
+      { team: '树海勘察组', emblem: '素材/堡垒战术分队.png', players: [{name:'选手戊',avatar:'素材/6745fcce899aa6ef7030d7e39daa379137804608.png@1052w_!web-dynamic.webp',prelim:1320,final:0,multiplier:'堡垒战术',ending:'畸症',starter:'黍',squad:'堡垒战术分队',recruit:'塞雷娅、夜莺',scoreItems:[{category:'特殊任务加分',rule:'进入〈安眠一隅〉节点',points:20}]},{name:'选手己',avatar:'素材/bdbcabe6ce09f44ef3ef56d270feff3537804608.png@1052w_!web-dynamic.webp',prelim:1160,final:0,multiplier:'多边贸易',ending:'痛苦将息',starter:'缪尔赛思',squad:'多边贸易分队',recruit:'维什戴尔、逻各斯',scoreItems:[{category:'藏品加分',rule:'通关时携带藏品 2 个',points:10}]}]},
+      { team: '归航观测组', emblem: '素材/破坏战术分队.png', players: [{name:'选手庚',avatar:'素材/azXYuTUtKZ.png@2e_90q.webp',prelim:1270,final:0,multiplier:'破坏战术',ending:'混沌源阶理论',starter:'提丰',squad:'破坏战术分队',recruit:'凯尔希、伊内丝',scoreItems:[{category:'特殊任务加分',rule:'鸭熊鼠狗击杀 2 个',points:30}]},{name:'选手辛',avatar:'素材/6745fcce899aa6ef7030d7e39daa379137804608.png@1052w_!web-dynamic.webp',prelim:1090,final:0,multiplier:'突击战术',ending:'畸症',starter:'夜莺',squad:'突击战术分队',recruit:'黍、艾雅法拉',scoreItems:[]}]},
+      { team: '深林记录组', emblem: '素材/文明开化分队.png', players: [{name:'选手壬',avatar:'素材/bdbcabe6ce09f44ef3ef56d270feff3537804608.png@1052w_!web-dynamic.webp',prelim:1210,final:0,multiplier:'文明开化',ending:'痛苦将息',starter:'艾雅法拉',squad:'文明开化分队',recruit:'棘刺、提丰',scoreItems:[{category:'特殊任务加分',rule:'进入〈安眠一隅〉节点',points:20}]},{name:'选手癸',avatar:'素材/azXYuTUtKZ.png@2e_90q.webp',prelim:1050,final:0,multiplier:'开拓者',ending:'畸症',starter:'伊内丝',squad:'开拓者分队',recruit:'逻各斯、黍',scoreItems:[{category:'藏品加分',rule:'通关时携带藏品 2 个',points:10}]}]}
+    ];
+    let roster = demoRoster;
+    let days = { prelim: ['日期待公布'], final: ['决赛日期待公布'] };
+    let currentStage = 'prelim';
+    let currentDay = 0;
+    let rankMode = 'current';
+
+    /**
+     * 根据初赛成绩确定决赛参赛队伍。
+     * 返回值是进入决赛的队伍集合；正式数据接入后仍应以初赛实际总分为唯一依据。
+     */
+    function getFinalTeams() {
+      return new Set(roster
+        .map(team => ({team, total: team.players.reduce((sum, player) => sum + calculatePlayerScore(player, 'prelim'), 0)}))
+        .sort((a, b) => b.total - a.total)
+        .slice(0, 2)
+        .map(item => item.team.team));
+    }
+
+    /**
+     * 按当前演示规则计算一名选手的阶段得分。
+     * 参数 stage 决定读取初赛还是决赛的游戏结算分，返回值用于选手详情和队伍排名。
+     */
+    /** 汇总单名选手的基础分、分队倍率、规则加分与结局分；参数 stage 指定计分赛段。 */
+    function getScoreComponents(player, stage) {
+      const base = stage === 'prelim' ? player.prelim : player.final;
+      const modifier = player.multiplier === '文明开化' ? 1.12 : player.multiplier === '多边贸易' ? 0.88 : ['开拓者', '地质调查'].includes(player.multiplier) ? 0.95 : 1;
+      const multiplierDelta = Math.round(base * modifier) - base;
+      const squadBonus = player.multiplier === '矛头' ? 100 : 0;
+      const endings = player.endings || [player.ending];
+      const endingItems = endings.map(ending => ({
+        category: '结局加分',
+        rule: `${endingRuleTypes[ending]}（${ending}）`,
+        points: endingRulePoints[ending]
+      }));
+      const ruleItems = player.scoreItems;
+      const bonusTotal = ruleItems.reduce((sum, item) => sum + item.points, 0);
+      const endingTotal = endingItems.reduce((sum, item) => sum + item.points, 0);
+      return {base, multiplierDelta, squadBonus, ruleItems, endingItems, total: base + multiplierDelta + squadBonus + bonusTotal + endingTotal};
+    }
+
+    /** 返回规则计算后的选手总分，供队伍晋级、排名与赛程详情共用。 */
+    function calculatePlayerScore(player, stage) {
+      return getScoreComponents(player, stage).total;
+    }
+
+    const endingRuleTypes = {'痛苦将息':'一结局','畸症':'二结局','混沌源阶理论':'三结局'};
+    const endingRulePoints = {'痛苦将息':80,'畸症':150,'混沌源阶理论':150};
+
+    /** 为观众生成可核对的规则计分明细；当前规则没有扣分项，因此只显示实际倍率负向调整。 */
+    function scoreLedgerMarkup(player, stage) {
+      const components = getScoreComponents(player, stage);
+      const itemMarkup = [...components.ruleItems, ...components.endingItems].map(item => `<span class="ledger-heading">${item.category}</span><span class="ledger-rule">${item.rule}</span><b class="ledger-points positive">+${item.points}</b>`).join('');
+      return `<div class="score-ledger"><span class="ledger-heading">基础与分队计算</span><span class="ledger-rule">游戏结算分</span><b class="ledger-points">${components.base}</b><span class="ledger-rule">${player.multiplier}倍率调整</span><b class="ledger-points ${components.multiplierDelta < 0 ? 'negative' : 'positive'}">${components.multiplierDelta > 0 ? '+' : ''}${components.multiplierDelta}</b>${components.squadBonus ? `<span class="ledger-rule">矛头分队额外加分</span><b class="ledger-points positive">+${components.squadBonus}</b>` : ''}${itemMarkup}<span class="ledger-heading">本届规则未设置扣分项</span><span class="ledger-rule">最终得分</span><b class="ledger-points">${components.total}</b></div>`;
+    }
+
+    /** 根据导航目标切换单页视图，并同步更新导航状态。 */
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(page => page.classList.toggle('active', page.id === pageId));
+      document.querySelectorAll('.nav button').forEach(button => button.classList.toggle('active', button.dataset.page === pageId));
+      document.querySelector('.nav').classList.remove('open');
+      document.querySelector('.menu-toggle').setAttribute('aria-expanded', 'false');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    /** 按当前赛段绘制日期选择项，供观众切换每日阵容。 */
+    function renderDays() {
+      const tabs = document.getElementById('dayTabs');
+      tabs.innerHTML = days[currentStage].map((day, index) => `<button class="${index === currentDay ? 'active' : ''}" data-day="${index}">${day}</button>`).join('');
+      tabs.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
+        currentDay = Number(button.dataset.day);
+        renderDays();
+        renderSchedule();
+      }));
+    }
+
+    /** 生成单名选手的成绩记录、游戏构筑信息与分数构成。 */
+    function playerMarkup(player, stage) {
+      const gameScore = stage === 'prelim' ? player.prelim : player.final;
+      const components = getScoreComponents(player, stage);
+      const total = components.total;
+      const endings = player.endings || [player.ending];
+      const endingMarkup = endings.map(ending => `<span class="ending-inline"><img src="素材/通关：${ending}.png" alt="">${ending}</span>`).join('');
+      const squadIcon = `素材/${player.squad}.png`;
+      const team = roster.find(item => item.players.includes(player));
+      const extraPoints = components.ruleItems.reduce((sum, item) => sum + item.points, 0) + components.endingItems.reduce((sum, item) => sum + item.points, 0) + components.squadBonus;
+      return `<article class="score-detail-card"><header class="score-detail-head"><img class="avatar" src="${player.avatar}" alt="${player.name}"><div><h3>${player.name}</h3><p>${team.team}　·　${stage === 'prelim' ? '初赛' : '决赛'}参赛选手</p></div><div class="score-detail-total"><small>最终得分</small><strong>${total}</strong></div></header><div class="detail-layout"><div class="detail-block"><small>开局主力</small><strong>${player.starter}</strong></div><div class="detail-block"><small>开局分队</small><strong class="squad-badge"><img src="${squadIcon}" alt="">${player.squad}</strong></div><div class="detail-block"><small>完成结局</small><strong class="ending-list">${endingMarkup}</strong></div><section class="lineup-panel"><h4>抓位图</h4><div class="lineup-image"><img src="素材/F8BFE1BCD99991E455B532388C528159.jpg" alt="选手抓位图"></div></section></div><div class="score-breakdown"><div><small>提取余额</small><strong>待录入</strong></div><div><small>结算分数</small><strong>${gameScore}</strong></div><div><small>额外加分</small><strong>+${extraPoints}</strong></div><div class="final-score"><small>最终得分</small><strong>${total}</strong></div></div><details class="point-details"><summary>查看详细积分构成</summary>${scoreLedgerMarkup(player, stage)}</details><p class="formula-note">计分明细为规则展示用演示数据；正式成绩录入将在下一阶段实现。</p></article>`;
+    }
+
+    /** 绘制所选日期的参赛选手；未定日程以明确占位提示代替虚构安排。 */
+    function renderSchedule() {
+      const host = document.getElementById('scheduleContent');
+      const player = roster[0].players[0];
+      host.innerHTML = `<article class="match-card"><div class="match-top"><strong>${currentStage === 'prelim' ? '初赛' : '决赛'}　/　${days[currentStage][currentDay]}</strong><span>单场比赛 · 单名选手 · 演示记录</span></div>${playerMarkup(player, currentStage)}</article>`;
+    }
+
+    
+    /** 计算队伍在当前榜单模式下适用的成员得分和总分。 */
+    function teamScore(team, index) {
+      const finalTeams = getFinalTeams();
+      const useFinal = rankMode === 'current' && finalTeams.has(team.team);
+      const stage = useFinal ? 'final' : 'prelim';
+      const scores = team.players.map(player => calculatePlayerScore(player, stage));
+      return { stage: useFinal ? '决赛' : '初赛', scores, total: scores.reduce((sum, score) => sum + score, 0) };
+    }
+
+    /** 按适用赛段计算队伍排名，并绘制精简榜单和积分数据入口。 */
+    function renderRanking() {
+      const ranked = roster.map((team, index) => ({team, index, ...teamScore(team, index)})).sort((a, b) => b.total - a.total);
+      document.getElementById('rankRows').innerHTML = ranked.map((row, position) => `<div class="team-row"><span class="ranknum">${String(position + 1).padStart(2, '0')}</span><span class="rankteam"><img src="${row.team.emblem}" alt="">${row.team.team}</span><span class="member-scores">${row.team.players.map((player, index) => `<span class="member-score" title="${player.name}" aria-label="${player.name}：${Math.round(row.scores[index])}分"><img src="${player.avatar}" alt="${player.name}"><b>${Math.round(row.scores[index])}</b></span>`).join('')}</span><span>${row.stage}</span><strong class="total">${Math.round(row.total)}</strong></div>`).join('');
+      const tabs = document.getElementById('scoreTeamTabs');
+      tabs.innerHTML = roster.map((team, index) => `<button class="${index === 0 ? 'active' : ''}" data-score-team="${index}"><img src="${team.emblem}" alt="">${team.team}</button>`).join('');
+      tabs.querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
+        tabs.querySelectorAll('button').forEach(tab => tab.classList.toggle('active', tab === button));
+        renderScoreData(Number(button.dataset.scoreTeam));
+      }));
+      renderScoreData(0);
+    }
+
+    /** 展示所选队伍各选手的详细积分构成；参数 index 对应演示队伍索引。 */
+    function renderScoreData(index) {
+      const team = roster[index];
+      const row = teamScore(team, index);
+      document.getElementById('scoreData').innerHTML = `<div class="score-data-card"><header class="score-data-team"><img src="${team.emblem}" alt=""><h3>${team.team}</h3><span>队伍总分 ${Math.round(row.total)}</span></header><div class="score-data-row head"><span>参赛选手</span><span>游戏结算分</span><span>分队计分</span><span>额外加分</span><span>最终得分</span></div>${team.players.map((player, playerIndex) => { const stage = row.stage === '决赛' ? 'final' : 'prelim'; const components = getScoreComponents(player, stage); const modifier = player.multiplier === '文明开化' ? '×1.12' : player.multiplier === '多边贸易' ? '×0.88' : ['开拓者', '地质调查'].includes(player.multiplier) ? '×0.95' : '×1.00'; const extra = components.ruleItems.reduce((sum, item) => sum + item.points, 0) + components.endingItems.reduce((sum, item) => sum + item.points, 0) + components.squadBonus; return `<details class="score-data-entry"><summary class="score-data-row"><span class="score-name"><img src="${player.avatar}" alt="">${player.name}</span><span>${components.base}</span><span>${modifier}</span><span>+${extra}</span><strong>${components.total}</strong></summary>${scoreLedgerMarkup(player, stage)}</details>`; }).join('')}</div>`;
+    }
+
+    /** 根据点击状态播放或暂停主题音乐，并同步更新按钮文案与无障碍状态。 */
+    function toggleThemeMusic() {
+      const audio = document.getElementById('themeAudio');
+      const button = document.getElementById('musicToggle');
+      if (audio.paused) {
+        audio.play();
+        button.textContent = '暂停音乐';
+        button.setAttribute('aria-pressed', 'true');
+      } else {
+        audio.pause();
+        button.textContent = '播放音乐';
+        button.setAttribute('aria-pressed', 'false');
+      }
+    }
+
+    document.getElementById('musicToggle').addEventListener('click', toggleThemeMusic);
+    document.getElementById('themeAudio').addEventListener('play', () => { document.getElementById('musicToggle').textContent = '暂停音乐'; document.getElementById('musicToggle').setAttribute('aria-pressed', 'true'); });
+    document.getElementById('themeAudio').addEventListener('pause', () => { document.getElementById('musicToggle').textContent = '播放音乐'; document.getElementById('musicToggle').setAttribute('aria-pressed', 'false'); });
+    document.querySelectorAll('.nav button').forEach(button => button.addEventListener('click', () => showPage(button.dataset.page)));
+    document.querySelectorAll('[data-go]').forEach(button => button.addEventListener('click', () => showPage(button.dataset.go)));
+    document.querySelectorAll('[data-link-page]').forEach(link => link.addEventListener('click', event => { event.preventDefault(); showPage(link.dataset.linkPage); }));
+    document.querySelector('.menu-toggle').addEventListener('click', event => {
+      const open = document.querySelector('.nav').classList.toggle('open');
+      event.currentTarget.setAttribute('aria-expanded', String(open));
+    });
+    document.querySelectorAll('[data-stage]').forEach(button => button.addEventListener('click', () => {
+      currentStage = button.dataset.stage;
+      currentDay = 0;
+      document.querySelectorAll('[data-stage]').forEach(tab => tab.classList.toggle('active', tab === button));
+      renderDays();
+      renderSchedule();
+    }));
+    document.querySelectorAll('[data-rank-mode]').forEach(button => button.addEventListener('click', () => {
+      rankMode = button.dataset.rankMode;
+      document.querySelectorAll('[data-rank-mode]').forEach(tab => tab.classList.toggle('active', tab === button));
+      renderRanking();
+    }));
+    /** 从本地服务读取赛事数据；直接打开静态文件时保留演示数据以便继续查看视觉原型。 */
+    async function loadCompetitionState() {
+      if (window.location.protocol === 'file:') return;
+      const response = await fetch('/api/competition');
+      if (!response.ok) throw new Error(`赛事数据接口返回 ${response.status}`);
+      const state = await response.json();
+      roster = state.roster;
+      days = state.days;
+    }
+
+    /** 等待赛事数据加载后初始化首页、赛程、排名和积分数据视图。 */
+    async function bootstrap() {
+      await loadCompetitionState();
+      renderDays();
+      renderSchedule();
+      renderRanking();
+    }
+
+    bootstrap();
+  -->
+</body>
+</html>

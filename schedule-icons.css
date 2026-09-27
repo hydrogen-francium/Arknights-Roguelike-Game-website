@@ -1,0 +1,5 @@
+.squad-icon,.ending-icon{display:inline-flex;align-items:center;gap:7px;flex-wrap:wrap;margin-right:8px}
+.squad-icon img{width:28px;height:28px;object-fit:contain}
+.ending-icon img{width:30px;height:30px;object-fit:contain}
+.ending-list{display:flex!important;align-items:center;gap:8px;flex-wrap:wrap}
+.ending-text{padding:5px 8px;background:#d3ddd0;border-radius:4px;font-size:12px}
