@@ -266,17 +266,26 @@ async function enterAdminEditor() {
 /** 提交后台登录凭据并建立服务器会话。 */
 async function handleLogin(event) {
   event.preventDefault();
+  const loginButton = document.querySelector('#loginForm button[type="submit"]');
   showLoginError('');
-  const response = await fetch('/api/session', {
-    method: 'POST',
-    headers: {'content-type': 'application/json'},
-    body: JSON.stringify({username: document.getElementById('loginUsername').value, password: document.getElementById('loginPassword').value})
-  });
-  if (!response.ok) {
-    const result = await response.json().catch(() => ({}));
-    throw new Error(result.error || `登录失败：${response.status}`);
+  loginButton.disabled = true;
+  try {
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+    const response = await fetch('/api/session', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      credentials: 'same-origin',
+      body: JSON.stringify({username, password})
+    });
+    if (!response.ok) {
+      const result = await response.json().catch(() => ({}));
+      throw new Error(result.error || `登录失败：${response.status}`);
+    }
+    await enterAdminEditor();
+  } finally {
+    loginButton.disabled = false;
   }
-  await enterAdminEditor();
 }
 
 /** 删除当前后台会话并回到登录页。 */

@@ -9,3 +9,4 @@
 - 遇到后台分页、日程图标对应、音乐自动播放或 Docker 上传素材持久化时，必须优先读取 `.context/architecture/赛事官网架构.md`、`site.js` 和 `README.md`。
 - 遇到页面筹备中状态、公开接口数据投影、后台登录会话或素材上传鉴权时，必须优先读取 `.context/conventions/页面发布与后台鉴权.md`。
 - 遇到服务端权威计分、公开排名数据或前后端计分规则不一致时，必须优先读取 `scoring.js` 与 `.context/architecture/赛事官网架构.md`。
+- 遇到后台登录按钮无响应、登录脚本解析错误或部署后仍加载旧后台脚本时，必须优先读取 `.context/pitfalls/后台登录脚本缓存与提交处理.md`。
