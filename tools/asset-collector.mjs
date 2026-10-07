@@ -3,6 +3,7 @@ import { mkdir, readFile, readdir, writeFile, copyFile } from 'node:fs/promises'
 import { resolve, dirname, basename, extname, join, sep, relative, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { setTimeout as pause } from 'node:timers/promises';
+import { readOfficialArchive } from './official-archive.mjs';
 
 const toolDir = dirname(fileURLToPath(import.meta.url));
 const projectDir = resolve(toolDir, '..');
@@ -53,7 +54,24 @@ export function extractLinks(text, base, hosts) {
     if (/\.(?:png|jpe?g|webp|gif|svg)$/i.test(new URL(original).pathname)) images.add(original);
     if (/\.css$/i.test(url.pathname)) styles.add(url.href);
   }
-  return { images: [...images], styles: [...styles] };
+  const scripts = [];
+  for (const match of decoded.matchAll(/<script\b[^>]*\bsrc\s*=\s*["']([^"']+)["']/gi)) {
+    const url = new URL(match[1], base);
+    if (hosts.includes(url.hostname) && url.protocol === 'https:' && /\.js$/i.test(url.pathname)) scripts.push(url.href);
+  }
+  return { images: [...images], styles: [...styles], scripts: [...new Set(scripts)] };
+}
+
+/** 将脚本文本中的图片路径解析到已核对的构建资源根目录；不执行脚本，不跟踪其接口或动态代码。 */
+export function extractScriptImages(text, assetBase, hosts) {
+  const images = new Set(extractLinks(text, assetBase, hosts).images);
+  const decoded = decodeLinks(text);
+  // 两类相对路径来自官方构建产物的资源模块，不能按脚本所在目录猜测资源根目录。
+  for (const match of decoded.matchAll(/["']((?:assets|static)\/[^"'\s<>\\]+\.(?:png|jpe?g|webp|gif|svg))["']/gi)) {
+    const url = new URL(match[1], assetBase);
+    if (hosts.includes(url.hostname)) images.add(url.href);
+  }
+  return [...images];
 }
 
 /** 解析抓取规则中的访问组与路径规则；空禁止项不禁止访问，返回供路径判定使用的规则组。 */
@@ -152,13 +170,21 @@ export function validateConfig(config) {
   if (!Array.isArray(config.sources) || !config.sources.length) throw new Error('配置必须包含非空 sources 数组');
   for (const source of config.sources) {
     if (!source || typeof source.id !== 'string' || !source.id.trim() || typeof source.name !== 'string' || !source.name.trim() || !Array.isArray(source.pages) || !source.pages.length || source.pages.some(page => typeof page !== 'string') || !Array.isArray(source.hosts) || !source.hosts.length || source.hosts.some(host => typeof host !== 'string' || !/^(?:[a-z0-9-]+\.)+[a-z0-9-]+$/i.test(host))) throw new Error('每个来源必须提供 id、name、pages 和 hosts');
+    if (source.scriptAssetBase !== undefined) {
+      const base = new URL(source.scriptAssetBase);
+      if (base.protocol !== 'https:' || !source.hosts.includes(base.hostname) || !base.pathname.endsWith('/')) throw new Error('scriptAssetBase 必须是白名单内的 HTTPS 资源根目录');
+    }
+    if (source.archive !== undefined) {
+      const endpoint = new URL(source.archive.url);
+      if (endpoint.protocol !== 'https:' || !source.hosts.includes(endpoint.hostname) || !Number.isSafeInteger(source.archive.maxPages) || source.archive.maxPages <= 0) throw new Error('archive 必须提供白名单内的 HTTPS url 和正整数 maxPages');
+    }
     for (const page of source.pages) {
       const url = new URL(page);
       if (url.protocol !== 'https:' || !source.hosts.includes(url.hostname)) throw new Error('页面必须使用 HTTPS 且在来源 hosts 中：' + page);
     }
   }
   if (new Set(config.sources.map(source => source.id)).size !== config.sources.length) throw new Error('来源编号不能重复');
-  for (const key of ['delayMs', 'timeoutMs', 'maxAssets', 'maxFileBytes', 'maxStyles']) {
+  for (const key of ['delayMs', 'timeoutMs', 'maxAssets', 'maxFileBytes', 'maxStyles', 'maxScripts']) {
     if (!Number.isSafeInteger(config[key]) || config[key] <= 0) throw new Error(key + ' 必须是正整数');
   }
   if (config.delayMs < 1000) throw new Error('请求间隔不得少于 1000 毫秒');
@@ -171,9 +197,9 @@ function escapeHtml(value) {
 
 /** 生成可直接双击的静态预览页；数据内嵌且转义，不需要启动服务或向远程图床发起请求。 */
 export function galleryMarkup(manifest) {
-  const cards = manifest.assets.map(asset => '<article class="card" data-id="' + asset.sha256 + '" data-search="' + escapeHtml(asset.name + ' ' + asset.category + ' ' + asset.sources.map(source => source.name).join(' ')) + '"><div class="preview"><img loading="lazy" decoding="async" src="' + escapeHtml(asset.file) + '" alt="' + escapeHtml(asset.name) + '"></div><div class="info"><label><input type="checkbox" value="' + asset.sha256 + '"><b>' + escapeHtml(asset.name) + '</b></label><p>' + escapeHtml(asset.category) + ' · ' + Math.round(asset.bytes / 1024) + ' KB · <span class="dimensions">等待加载尺寸</span></p><p>' + escapeHtml(asset.sources.map(source => source.name).join(' / ')) + '</p>' + (asset.existingFiles.length ? '<p class="existing">已有相同素材：' + escapeHtml(asset.existingFiles.join('、')) + '</p>' : '') + '<p><a href="' + escapeHtml(asset.file) + '" target="_blank" rel="noopener">打开原图</a> <a href="' + escapeHtml(asset.sources[0].page) + '" target="_blank" rel="noopener noreferrer">来源页面</a></p><code>' + escapeHtml(asset.file) + '</code></div></article>').join('');
+  const cards = manifest.assets.map(asset => '<article class="card" data-id="' + asset.sha256 + '" data-search="' + escapeHtml(asset.name + ' ' + asset.category + ' ' + asset.sources.map(source => source.name + (source.title ? ' ' + source.title : '')).join(' ')) + '"><div class="preview"><img loading="lazy" decoding="async" src="' + escapeHtml(asset.file) + '" alt="' + escapeHtml(asset.name) + '"></div><div class="info"><label><input type="checkbox" value="' + asset.sha256 + '"><b>' + escapeHtml(asset.name) + '</b></label><p>' + escapeHtml(asset.category) + ' · ' + Math.round(asset.bytes / 1024) + ' KB · <span class="dimensions">等待加载尺寸</span></p><p>' + escapeHtml([...new Set(asset.sources.map(source => source.name + (source.title ? ' · ' + source.title : '')))].join(' / ')) + '</p>' + (asset.existingFiles.length ? '<p class="existing">已有相同素材：' + escapeHtml(asset.existingFiles.join('、')) + '</p>' : '') + '<p><a href="' + escapeHtml(asset.file) + '" target="_blank" rel="noopener">打开原图</a> <a href="' + escapeHtml(asset.sources[0].page) + '" target="_blank" rel="noopener noreferrer">来源页面</a></p><code>' + escapeHtml(asset.file) + '</code></div></article>').join('');
   const data = JSON.stringify(manifest).replace(/</g, '\\u003c');
-  return '<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>蟑螂杯 · 候选素材筛选</title><link rel="stylesheet" href="gallery.css"></head><body><header><h1>候选素材筛选</h1><p>原图与来源保存在本地；采集成功不代表拥有使用授权。不会自动替换官网素材。</p><div class="tools"><input id="search" placeholder="搜索文件名、来源、分类"><select id="source"><option value="">全部来源</option>' + manifest.sources.map(source => '<option value="' + escapeHtml(source.id) + '">' + escapeHtml(source.name) + '</option>').join('') + '</select><select id="category"><option value="">全部分类</option><option>背景</option><option>分队</option><option>结局</option><option>图标</option><option>游戏元素</option><option>待筛选</option></select><select id="background"><option value="checker">透明棋盘</option><option value="dark">深色背景</option><option value="light">浅色背景</option></select><button id="selectVisible">勾选当前筛选结果</button><button id="clear">清空勾选</button><button id="export">导出已选素材清单</button></div><p id="status"></p></header><main>' + cards + '</main><script type="application/json" id="asset-data">' + data + '</script><script src="gallery.js"></script></body></html>';
+  return '<!doctype html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>蟑螂杯 · 候选素材筛选</title><link rel="stylesheet" href="gallery.css"></head><body><header><h1>候选素材筛选</h1><p>原图与来源保存在本地；采集成功不代表拥有使用授权。不会自动替换官网素材。</p><div class="tools"><input id="search" placeholder="搜索文件名、档案名称、来源、分类"><select id="source"><option value="">全部来源</option>' + manifest.sources.map(source => '<option value="' + escapeHtml(source.id) + '">' + escapeHtml(source.name) + '</option>').join('') + '</select><select id="category"><option value="">全部分类</option><option>背景</option><option>分队</option><option>结局</option><option>图标</option><option>游戏元素</option><option>待筛选</option></select><select id="background"><option value="checker">透明棋盘</option><option value="dark">深色背景</option><option value="light">浅色背景</option></select><button id="selectVisible">勾选当前筛选结果</button><button id="clear">清空勾选</button><button id="export">导出已选素材清单</button></div><p id="status"></p></header><main>' + cards + '</main><script type="application/json" id="asset-data">' + data + '</script><script src="gallery.js"></script></body></html>';
 }
 
 /** 扫描官网当前图片的摘要，供预览页标记已有素材，不移动、不重写官网文件。 */
@@ -222,8 +248,17 @@ export async function collectAssets(config, output) {
   const request = createRequester(hosts, config.delayMs, config.timeoutMs);
   const candidates = new Map();
   const stylesSeen = new Set();
+  const scriptImages = new Map();
   manifest.sources = config.sources.map(source => ({ id: source.id, name: source.name, pages: source.pages }));
   manifest.collectedAt = new Date().toISOString();
+  /** 将同一图片的发现地址合并；保留所有来源，供人工筛选时溯源，不覆盖已有内容。 */
+  function remember(urls, source, page, title) {
+    for (const url of urls) {
+      if (!candidates.has(url)) candidates.set(url, []);
+      const records = candidates.get(url);
+      if (!records.some(item => item.page === page)) records.push({ id: source.id, name: source.name, page, url, ...(title ? { title } : {}) });
+    }
+  }
   try {
     for (const source of config.sources) {
       for (const page of source.pages) {
@@ -239,11 +274,23 @@ export async function collectAssets(config, output) {
           if (!styleResponse.headers.get('content-type')?.includes('text/css')) throw new Error('样式响应不是 CSS：' + style);
           links.images.push(...extractLinks(await styleResponse.text(), style, source.hosts).images);
         }
-        for (const url of links.images) {
-          if (!candidates.has(url)) candidates.set(url, []);
-          const sources = candidates.get(url);
-          if (!sources.some(item => item.page === page)) sources.push({ id: source.id, name: source.name, page, url });
+        // 仅配置了官方构建资源根目录的来源读取直接引用脚本，读取文本与执行脚本完全分离。
+        if (source.scriptAssetBase) {
+          for (const script of links.scripts) {
+            if (!scriptImages.has(script)) {
+              if (scriptImages.size >= config.maxScripts) throw new Error('脚本数量超过 maxScripts，请检查范围');
+              const scriptResponse = await request(script, page);
+              if (!/^(?:application|text)\/(?:javascript|x-javascript)(?:;|$)/i.test(scriptResponse.headers.get('content-type') || '')) throw new Error('脚本响应不是 JavaScript：' + script);
+              scriptImages.set(script, extractScriptImages(await scriptResponse.text(), source.scriptAssetBase, source.hosts));
+            }
+            remember(scriptImages.get(script), source, script);
+          }
         }
+        remember(links.images, source, page);
+      }
+      if (source.archive) {
+        const records = await readOfficialArchive(source.archive, request);
+        for (const record of records) remember(extractLinks(JSON.stringify(record.item), record.page, source.hosts).images, source, record.page, record.item.name);
       }
     }
     manifest.discovered = candidates.size;

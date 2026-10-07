@@ -15,3 +15,5 @@
 - 遇到精英探索者、整届固定指定干员、取消逐局使用登记或浏览器标签页图标时，必须优先读取 `.context/conventions/精英探索者与网页图标.md`。
 
 - 遇到素材爬虫、公开图片采集、候选图库、原图还原或手动筛选清单时，必须优先读取 `.context/architecture/素材采集与候选筛选.md` 和 `tools/asset-collector.mjs`。
+
+- 遇到鹰角官方素材、动画官网图片、构建脚本资源根目录或干员档案分页采集时，必须优先读取 `.context/architecture/素材采集与候选筛选.md`、`tools/official-archive.mjs` 和 `tools/asset-sources.json`。

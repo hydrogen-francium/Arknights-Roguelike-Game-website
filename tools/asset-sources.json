@@ -1,9 +1,9 @@
 {
   "delayMs": 1000,
   "timeoutMs": 30000,
-  "maxAssets": 350,
-  "maxFileBytes": 12582912,
-  "maxStyles": 40,
+  "maxAssets": 2000,
+  "maxFileBytes": 33554432,
+  "maxStyles": 100,
   "sources": [
     {
       "id": "reference",
@@ -34,6 +34,60 @@
         "media.prts.wiki",
         "static.prts.wiki"
       ]
+    },
+    {
+      "id": "hypergryph",
+      "name": "鹰角网络官网",
+      "pages": [
+        "https://www.hypergryph.com/"
+      ],
+      "hosts": [
+        "www.hypergryph.com",
+        "web-ipv6.hycdn.cn"
+      ],
+      "scriptAssetBase": "https://web-ipv6.hycdn.cn/hypergryph/official/"
+    },
+    {
+      "id": "arknights-official",
+      "name": "明日方舟官网",
+      "pages": [
+        "https://ak.hypergryph.com/",
+        "https://ak.hypergryph.com/archive/video"
+      ],
+      "hosts": [
+        "ak.hypergryph.com",
+        "web.hycdn.cn"
+      ],
+      "scriptAssetBase": "https://web.hycdn.cn/arknights/official/_next/"
+    },
+    {
+      "id": "arknights-archive",
+      "name": "明日方舟官方干员档案",
+      "pages": [
+        "https://ak.hypergryph.com/archive/dynamicCompile"
+      ],
+      "hosts": [
+        "ak.hypergryph.com",
+        "web.hycdn.cn"
+      ],
+      "scriptAssetBase": "https://web.hycdn.cn/arknights/official/_next/",
+      "archive": {
+        "url": "https://ak.hypergryph.com/api/archive/dynComp?type=",
+        "maxPages": 30
+      }
+    },
+    {
+      "id": "arknights-anime",
+      "name": "明日方舟动画官网",
+      "pages": [
+        "https://ak.hypergryph.com/anime/"
+      ],
+      "hosts": [
+        "ak.hypergryph.com",
+        "web.hycdn.cn"
+      ],
+      "scriptAssetBase": "https://web.hycdn.cn/arknights/anime/official/"
     }
-  ]
+  ],
+  "maxScripts": 100
 }
