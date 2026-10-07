@@ -76,20 +76,7 @@ function eliteExplorerEditorMarkup(team, teamIndex) {
   const explorer = team.eliteExplorer;
   const avatarId = 'elite-avatar-' + teamIndex;
   const options = sixStarOperators.map(operator => '<option value="' + escapeHtml(operator.id) + '" ' + (explorer?.operatorId === operator.id ? 'selected' : '') + '>' + escapeHtml(operator.name) + '</option>').join('');
-  return '<fieldset class="elite-editor"><legend>精英探索者 · 整届赛事固定</legend><div class="rule-grid"><label>指定六星干员<select data-elite-field="operatorId"><option value="">未指定</option>' + options + '</select></label><div class="upload-field"><label>干员头像（可选）<input id="' + avatarId + '" data-elite-field="avatar" value="' + escapeHtml(explorer?.avatar ?? '') + '"></label><button class="button secondary" data-upload-target="' + avatarId + '" type="button">上传</button></div><label class="elite-publish wide"><input type="checkbox" data-elite-field="published" ' + (explorer?.published ? 'checked' : '') + '>向观众公布该队伍的指定与使用记录</label></div><p class="small-note">指定干员可由全队不限次数使用；该身份不增加或扣除积分。初赛和决赛使用记录分别维护。未勾选公布时，公开接口不发送该指定和使用记录。</p></fieldset>';
-}
-
-/** 为指定赛段生成三态使用记录选项；空值代表未登记，不等同于未使用。 */
-function eliteUsageOptions(usage) {
-  return [[null, '未登记'], [true, '已使用'], [false, '未使用']].map(([value, label]) => '<option value="' + (value === null ? '' : String(value)) + '" ' + (usage === value ? 'selected' : '') + '>' + label + '</option>').join('');
-}
-
-/** 严格解析使用状态表单值，返回布尔值或未登记空值；非法选项立即抛错。 */
-function eliteUsageFromInput(value) {
-  if (value === '') return null;
-  if (value === 'true') return true;
-  if (value === 'false') return false;
-  throw new Error('精英探索者使用状态无效');
+  return '<fieldset class="elite-editor"><legend>指定干员 · 整届赛事固定</legend><div class="rule-grid"><label>选择干员<select data-elite-field="operatorId"><option value="">未指定</option>' + options + '</select></label><div class="upload-field"><label>干员头像（可选）<input id="' + avatarId + '" data-elite-field="avatar" value="' + escapeHtml(explorer?.avatar ?? '') + '"></label><button class="button secondary" data-upload-target="' + avatarId + '" type="button">上传</button></div><label class="elite-publish wide"><input type="checkbox" data-elite-field="published" ' + (explorer?.published ? 'checked' : '') + '>向观众公布该队伍的指定干员</label></div><p class="small-note">整届赛事共用此指定，不参与加减分。未勾选公布时，公开接口不发送该指定。</p></fieldset>';
 }
 
 /** 读取队伍指定表单；未指定时不允许保留头像或公布标记，返回指定对象或空值。 */
@@ -98,7 +85,7 @@ function collectEliteExplorer(card) {
   const avatar = card.querySelector('[data-elite-field="avatar"]').value;
   const published = card.querySelector('[data-elite-field="published"]').checked;
   if (!operatorId) {
-    if (avatar || published) throw new Error('未指定精英探索者时，请清空头像并取消公布');
+    if (avatar || published) throw new Error('未选择干员时，请清空头像并取消公布');
     return null;
   }
   return {operatorId, avatar, published};
@@ -113,7 +100,7 @@ function renderTeamsEditor() {
 function playerMarkup(player, teamIndex, playerIndex) {
   const avatarId = `avatar-${teamIndex}-${playerIndex}`;
   const lineupId = `lineup-${teamIndex}-${playerIndex}`;
-  return `<article class="player-card" data-player-id="${escapeHtml(player.id)}"><header class="inline-tools"><strong>选手 ${playerIndex + 1}</strong><button class="button danger" data-remove-player type="button">删除选手</button></header><div class="player-grid"><label>选手编号<input data-player-field="id" value="${escapeHtml(player.id)}"></label><label>选手名称<input data-player-field="name" value="${escapeHtml(player.name)}"></label><div class="upload-field"><label>头像<input id="${avatarId}" data-player-field="avatar" value="${escapeHtml(player.avatar)}"></label><button class="button secondary" data-upload-target="${avatarId}" type="button">上传</button></div><label>初赛游戏结算分<input type="number" data-player-field="prelim" value="${Number(player.prelim || 0)}"></label><label>决赛游戏结算分<input type="number" data-player-field="final" value="${Number(player.final || 0)}"></label><label>分队倍率名称<input data-player-field="multiplier" value="${escapeHtml(player.multiplier)}"></label><label>完成结局（逗号分隔）<input data-player-field="endings" value="${escapeHtml((player.endings || []).join('、'))}"></label><label>开局主力<input data-player-field="starter" value="${escapeHtml(player.starter)}"></label><label>开局分队<input data-player-field="squad" value="${escapeHtml(player.squad)}"></label><label>初赛使用精英探索者<select data-player-field="eliteUsagePrelim">${eliteUsageOptions(player.eliteExplorerUsage?.prelim ?? null)}</select></label><label>决赛使用精英探索者<select data-player-field="eliteUsageFinal">${eliteUsageOptions(player.eliteExplorerUsage?.final ?? null)}</select></label><label>干员抓位<input data-player-field="recruit" value="${escapeHtml(player.recruit)}"></label><label>提取余额<input data-player-field="extractionBalance" value="${escapeHtml(player.extractionBalance)}"></label><div class="upload-field"><label>阵容构筑图<input id="${lineupId}" data-player-field="lineupImage" value="${escapeHtml(player.lineupImage)}"></label><button class="button secondary" data-upload-target="${lineupId}" type="button">上传</button></div><label class="wide">规则加减分（类别|规则|分值，每行一项）<textarea data-player-field="scoreItems">${escapeHtml(stringifyScoreItems(player.scoreItems))}</textarea></label><label class="wide">扣分项目（类别|规则|分值，每行一项）<textarea data-player-field="deductions">${escapeHtml(stringifyScoreItems(player.deductions))}</textarea></label></div></article>`;
+  return `<article class="player-card" data-player-id="${escapeHtml(player.id)}"><header class="inline-tools"><strong>选手 ${playerIndex + 1}</strong><button class="button danger" data-remove-player type="button">删除选手</button></header><div class="player-grid"><label>选手编号<input data-player-field="id" value="${escapeHtml(player.id)}"></label><label>选手名称<input data-player-field="name" value="${escapeHtml(player.name)}"></label><div class="upload-field"><label>头像<input id="${avatarId}" data-player-field="avatar" value="${escapeHtml(player.avatar)}"></label><button class="button secondary" data-upload-target="${avatarId}" type="button">上传</button></div><label>初赛游戏结算分<input type="number" data-player-field="prelim" value="${Number(player.prelim || 0)}"></label><label>决赛游戏结算分<input type="number" data-player-field="final" value="${Number(player.final || 0)}"></label><label>分队倍率名称<input data-player-field="multiplier" value="${escapeHtml(player.multiplier)}"></label><label>完成结局（逗号分隔）<input data-player-field="endings" value="${escapeHtml((player.endings || []).join('、'))}"></label><label>开局主力<input data-player-field="starter" value="${escapeHtml(player.starter)}"></label><label>开局分队<input data-player-field="squad" value="${escapeHtml(player.squad)}"></label><label>干员抓位<input data-player-field="recruit" value="${escapeHtml(player.recruit)}"></label><label>提取余额<input data-player-field="extractionBalance" value="${escapeHtml(player.extractionBalance)}"></label><div class="upload-field"><label>阵容构筑图<input id="${lineupId}" data-player-field="lineupImage" value="${escapeHtml(player.lineupImage)}"></label><button class="button secondary" data-upload-target="${lineupId}" type="button">上传</button></div><label class="wide">规则加减分（类别|规则|分值，每行一项）<textarea data-player-field="scoreItems">${escapeHtml(stringifyScoreItems(player.scoreItems))}</textarea></label><label class="wide">扣分项目（类别|规则|分值，每行一项）<textarea data-player-field="deductions">${escapeHtml(stringifyScoreItems(player.deductions))}</textarea></label></div></article>`;
 }
 
 /** 将基础表单内容写回内存中的赛事状态。 */
@@ -168,7 +155,6 @@ function collectPlayer(card) {
     starter: value('starter'),
     squad: value('squad'),
     recruit: value('recruit'),
-    eliteExplorerUsage: {prelim: eliteUsageFromInput(value('eliteUsagePrelim')), final: eliteUsageFromInput(value('eliteUsageFinal'))},
     extractionBalance: value('extractionBalance'),
     lineupImage: value('lineupImage'),
     scoreItems: parseScoreItems(value('scoreItems')),

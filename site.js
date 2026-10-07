@@ -34,15 +34,7 @@ function eliteExplorerBadgeMarkup(team) {
   const explorer = team.eliteExplorer;
   if (!explorer) return '';
   const avatar = explorer.avatar ? '<img src="' + escapeHtml(explorer.avatar) + '" alt="" loading="lazy" decoding="async">' : '';
-  return '<div class="elite-explorer">' + avatar + '<div><small>精英探索者 · 六星</small><b>' + escapeHtml(explorer.name) + '</b></div></div>';
-}
-
-/** 展示选手在给定赛段的规则状态；它不进入积分账本，也不改变最终成绩。 */
-function eliteExplorerRuleMarkup(team, player, stage) {
-  if (!team.eliteExplorer) return '';
-  const used = player.eliteExplorerUsage?.[stage] ?? null;
-  const label = used === null ? '未登记' : used ? '已使用' : '未使用';
-  return '<section class="elite-rule-status"><h4>队伍规则状态</h4><div class="elite-rule-content">' + eliteExplorerBadgeMarkup(team) + '<p><b>本局使用：</b>' + label + '</p></div><p class="elite-rule-note">指定干员可由全队不限次数使用，不受普通六星干员每队两次的使用限制；该身份不加分或扣分。</p></section>';
+  return '<div class="elite-explorer">' + avatar + '<div><small>指定干员</small><b>' + escapeHtml(explorer.name) + '</b></div></div>';
 }
 
 /** 返回所有选手及所属队伍，用于日程、排名和积分数据共用同一份数据源。 */
@@ -143,7 +135,7 @@ function playerMarkup(player, team, stage) {
   const endingBadges = endings.map(ending => endingAssets[ending] ? `<span class="ending-icon"><img src="${escapeHtml(endingAssets[ending])}" alt="" loading="lazy" decoding="async">${escapeHtml(ending)}</span>` : `<span class="ending-icon ending-text">${escapeHtml(ending)}</span>`).join('') || '待录入';
   const squadIcon = squadAssets[player.squad];
   const squadMarkup = squadIcon ? `<span class="squad-icon"><img src="${escapeHtml(squadIcon)}" alt="" loading="lazy" decoding="async">${escapeHtml(player.squad)}</span>` : escapeHtml(player.squad || '待录入');
-  return `<article class="schedule-player-card"><div class="schedule-player-head"><img class="schedule-avatar" src="${escapeHtml(player.avatar)}" alt="" loading="lazy" decoding="async"><div><strong>${escapeHtml(player.name)}</strong><span>${escapeHtml(team.name)}</span></div><b>${components.total} 分</b></div><div class="player-detail-grid"><div><small>开局主力</small><strong>${escapeHtml(player.starter || '待录入')}</strong></div><div><small>开局分队</small><strong>${squadMarkup}</strong></div><div><small>完成结局</small><strong class="ending-list">${endingBadges}</strong></div><div><small>提取余额</small><strong>${escapeHtml(player.extractionBalance || '待录入')}</strong></div><div class="detail-wide"><small>干员抓位</small><strong>${escapeHtml(player.recruit || '待录入')}</strong></div></div>${eliteExplorerRuleMarkup(team, player, stage)}${player.lineupImage ? `<figure class="lineup-figure"><figcaption>阵容构筑</figcaption><img src="${escapeHtml(player.lineupImage)}" alt="${escapeHtml(player.name)}阵容构筑" loading="lazy" decoding="async"></figure>` : ''}<details class="schedule-score-details"><summary>查看得分详情</summary>${ledger}</details></article>`;
+  return `<article class="schedule-player-card"><div class="schedule-player-head"><img class="schedule-avatar" src="${escapeHtml(player.avatar)}" alt="" loading="lazy" decoding="async"><div><strong>${escapeHtml(player.name)}</strong><span>${escapeHtml(team.name)}</span>${eliteExplorerBadgeMarkup(team)}</div><b>${components.total} 分</b></div><div class="player-detail-grid"><div><small>开局主力</small><strong>${escapeHtml(player.starter || '待录入')}</strong></div><div><small>开局分队</small><strong>${squadMarkup}</strong></div><div><small>完成结局</small><strong class="ending-list">${endingBadges}</strong></div><div><small>提取余额</small><strong>${escapeHtml(player.extractionBalance || '待录入')}</strong></div><div class="detail-wide"><small>干员抓位</small><strong>${escapeHtml(player.recruit || '待录入')}</strong></div></div>${player.lineupImage ? `<figure class="lineup-figure"><figcaption>阵容构筑</figcaption><img src="${escapeHtml(player.lineupImage)}" alt="${escapeHtml(player.name)}阵容构筑" loading="lazy" decoding="async"></figure>` : ''}<details class="schedule-score-details"><summary>查看得分详情</summary>${ledger}</details></article>`;
 }
 
 /** 绘制当前赛段和当前日期的全部参赛选手；每日一场不再使用硬编码首名。 */
@@ -182,7 +174,7 @@ function renderScoreData() {
   const team = state.teams.find(item => item.id === selectedScoreTeamId);
   if (!team) return;
   const row = getTeamScore(team);
-  document.getElementById('scoreData').innerHTML = `<div class="score-data-card"><header class="score-data-team"><img src="${escapeHtml(team.emblem)}" alt="" loading="lazy" decoding="async"><div class="score-data-team-copy"><h3>${escapeHtml(team.name)}</h3>${eliteExplorerBadgeMarkup(team)}</div><span>队伍总分 ${Math.round(row.total)}</span></header>${team.players.map(player => { const components = getScoreComponents(player, row.stage); const modifier = getMultiplier(player).toFixed(2); const extra = components.squadBonus + [...components.ruleItems, ...components.endingItems, ...components.deductions].reduce((sum, item) => sum + Number(item.points || 0), 0); return `<details class="score-data-entry"><summary class="score-data-row"><span class="score-name"><img src="${escapeHtml(player.avatar)}" alt="" loading="lazy" decoding="async">${escapeHtml(player.name)}</span><span>${components.base}</span><span>×${modifier}</span><span class="${extra < 0 ? 'negative' : ''}">${extra > 0 ? '+' : ''}${extra}</span><strong>${components.total}</strong></summary><div class="score-data-expanded"><p><b>完成结局：</b>${escapeHtml((player.endings || []).join('、') || '待录入')}</p>${eliteExplorerRuleMarkup(team, player, row.stage)}${scoreLedgerMarkup(player, row.stage)}</div></details>`; }).join('')}</div>`;
+  document.getElementById('scoreData').innerHTML = `<div class="score-data-card"><header class="score-data-team"><img src="${escapeHtml(team.emblem)}" alt="" loading="lazy" decoding="async"><div class="score-data-team-copy"><h3>${escapeHtml(team.name)}</h3>${eliteExplorerBadgeMarkup(team)}</div><span>队伍总分 ${Math.round(row.total)}</span></header>${team.players.map(player => { const components = getScoreComponents(player, row.stage); const modifier = getMultiplier(player).toFixed(2); const extra = components.squadBonus + [...components.ruleItems, ...components.endingItems, ...components.deductions].reduce((sum, item) => sum + Number(item.points || 0), 0); return `<details class="score-data-entry"><summary class="score-data-row"><span class="score-name"><img src="${escapeHtml(player.avatar)}" alt="" loading="lazy" decoding="async">${escapeHtml(player.name)}</span><span>${components.base}</span><span>×${modifier}</span><span class="${extra < 0 ? 'negative' : ''}">${extra > 0 ? '+' : ''}${extra}</span><strong>${components.total}</strong></summary><div class="score-data-expanded"><p><b>完成结局：</b>${escapeHtml((player.endings || []).join('、') || '待录入')}</p>${scoreLedgerMarkup(player, row.stage)}</div></details>`; }).join('')}</div>`;
 }
 
 /** 将未发布页面替换为不含任何占位数据的筹备中状态。 */
