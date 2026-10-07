@@ -4,6 +4,7 @@ import { mkdir, readFile, readdir, rename, unlink, writeFile } from 'node:fs/pro
 import { basename, extname, join, normalize, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { calculatePlayerScore, getScoreComponents } from './scoring.js';
+import { validateEliteExplorer, projectEliteExplorer } from './elite-explorers.js';
 
 const rootDir = resolve(fileURLToPath(new URL('.', import.meta.url)));
 const dataFile = join(rootDir, 'data', 'competition.json');
@@ -16,7 +17,7 @@ const cookieSecure = process.env.COOKIE_SECURE === 'true';
 const sessionDurationMs = 12 * 60 * 60 * 1000;
 const sessions = new Map();
 const loginAttempts = new Map();
-const contentTypes = { '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.gif': 'image/gif', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.mp3': 'audio/mpeg', '.png': 'image/png', '.webp': 'image/webp' };
+const contentTypes = { '.css': 'text/css; charset=utf-8', '.html': 'text/html; charset=utf-8', '.gif': 'image/gif', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json; charset=utf-8', '.mp3': 'audio/mpeg', '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp' };
 
 if (adminUsername.length < 3 || adminPassword.length < 16 || adminPassword === 'REPLACE_WITH_LONG_RANDOM_SECRET') throw new Error('必须设置 ADMIN_USERNAME，并将 ADMIN_PASSWORD 设置为至少 16 位的非默认强密码');
 
@@ -37,7 +38,7 @@ function publicPagePayload(state, page) {
   if (!pages[page]) return { pages, content: null };
   if (page === 'home') return { pages, content: { event: state.event } };
   if (page === 'rules') return { pages, content: { rules: state.rules } };
-  const teams = attachComputedScores(state);
+  const teams = attachComputedScores(state).map(projectEliteExplorer);
   if (page === 'ranking') return { pages, content: { teams } };
   const days = [...state.schedule.prelim, ...state.schedule.final];
   const scheduledIds = new Set(days.flatMap(day => day.playerIds));
@@ -50,6 +51,7 @@ function validateCompetitionState(state) {
   if (!state.pages || ['home', 'rules', 'schedule', 'ranking'].some(key => typeof state.pages[key] !== 'boolean')) throw new Error('四个页面都必须明确设置发布或筹备状态');
   if (!Array.isArray(state.rules.sections) || !Array.isArray(state.schedule.prelim) || !Array.isArray(state.schedule.final)) throw new Error('规则或赛程结构无效');
   if (state.teams.some(team => !team || typeof team !== 'object' || !Array.isArray(team.players))) throw new Error('队伍必须包含选手数组');
+  state.teams.forEach(validateEliteExplorer);
   const playerIds = state.teams.flatMap(team => team.players.map(player => player.id));
   if (playerIds.some(id => typeof id !== 'string' || !id) || new Set(playerIds).size !== playerIds.length) throw new Error('选手编号必须存在且不能重复');
   if (state.schedule.prelim.concat(state.schedule.final).some(day => !Array.isArray(day.playerIds) || day.playerIds.some(id => !playerIds.includes(id)))) throw new Error('日程引用了不存在的选手编号');

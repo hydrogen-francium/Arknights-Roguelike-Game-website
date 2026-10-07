@@ -1,3 +1,6 @@
+import { sixStarOperators } from './six-star-operators.js';
+import { validateEliteExplorer } from './elite-explorers.js';
+
 let competitionState = null;
 
 /** 将数组转为后台多行文本，供运营者逐行编辑。 */
@@ -68,16 +71,49 @@ function renderScheduleStage(stage) {
   host.innerHTML = (competitionState.schedule[stage] || []).map((day, index) => `<div class="schedule-row" data-stage="${stage}" data-day-index="${index}"><label>日期<input data-day-field="date" value="${escapeHtml(day.date)}"></label><label>赛程标签<input data-day-field="label" value="${escapeHtml(day.label)}"></label><label>当日参赛选手<select data-day-field="playerIds">${playerOptions(day.playerIds?.[0] || '')}</select></label><button class="button danger" data-remove-day type="button">删除</button></div>`).join('');
 }
 
+/** 生成队伍整届固定的干员选择和公布表单；队伍索引用于头像上传控件的唯一编号。 */
+function eliteExplorerEditorMarkup(team, teamIndex) {
+  const explorer = team.eliteExplorer;
+  const avatarId = 'elite-avatar-' + teamIndex;
+  const options = sixStarOperators.map(operator => '<option value="' + escapeHtml(operator.id) + '" ' + (explorer?.operatorId === operator.id ? 'selected' : '') + '>' + escapeHtml(operator.name) + '</option>').join('');
+  return '<fieldset class="elite-editor"><legend>精英探索者 · 整届赛事固定</legend><div class="rule-grid"><label>指定六星干员<select data-elite-field="operatorId"><option value="">未指定</option>' + options + '</select></label><div class="upload-field"><label>干员头像（可选）<input id="' + avatarId + '" data-elite-field="avatar" value="' + escapeHtml(explorer?.avatar ?? '') + '"></label><button class="button secondary" data-upload-target="' + avatarId + '" type="button">上传</button></div><label class="elite-publish wide"><input type="checkbox" data-elite-field="published" ' + (explorer?.published ? 'checked' : '') + '>向观众公布该队伍的指定与使用记录</label></div><p class="small-note">指定干员可由全队不限次数使用；该身份不增加或扣除积分。初赛和决赛使用记录分别维护。未勾选公布时，公开接口不发送该指定和使用记录。</p></fieldset>';
+}
+
+/** 为指定赛段生成三态使用记录选项；空值代表未登记，不等同于未使用。 */
+function eliteUsageOptions(usage) {
+  return [[null, '未登记'], [true, '已使用'], [false, '未使用']].map(([value, label]) => '<option value="' + (value === null ? '' : String(value)) + '" ' + (usage === value ? 'selected' : '') + '>' + label + '</option>').join('');
+}
+
+/** 严格解析使用状态表单值，返回布尔值或未登记空值；非法选项立即抛错。 */
+function eliteUsageFromInput(value) {
+  if (value === '') return null;
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+  throw new Error('精英探索者使用状态无效');
+}
+
+/** 读取队伍指定表单；未指定时不允许保留头像或公布标记，返回指定对象或空值。 */
+function collectEliteExplorer(card) {
+  const operatorId = card.querySelector('[data-elite-field="operatorId"]').value;
+  const avatar = card.querySelector('[data-elite-field="avatar"]').value;
+  const published = card.querySelector('[data-elite-field="published"]').checked;
+  if (!operatorId) {
+    if (avatar || published) throw new Error('未指定精英探索者时，请清空头像并取消公布');
+    return null;
+  }
+  return {operatorId, avatar, published};
+}
+
 /** 绘制所有队伍、选手和图片字段。 */
 function renderTeamsEditor() {
-  document.getElementById('teamsEditor').innerHTML = competitionState.teams.map((team, teamIndex) => `<article class="editor-card team-card" data-team-id="${escapeHtml(team.id)}"><header class="team-header"><label>队伍名称<input data-team-field="name" value="${escapeHtml(team.name)}"></label><div class="upload-field"><label>队伍图标<input id="team-emblem-${teamIndex}" data-team-field="emblem" value="${escapeHtml(team.emblem)}"></label><button class="button secondary" data-upload-target="team-emblem-${teamIndex}" type="button">上传</button></div><button class="button danger" data-remove-team type="button">删除队伍</button></header><div class="players">${team.players.map((player, playerIndex) => playerMarkup(player, teamIndex, playerIndex)).join('')}</div><button class="button secondary" data-add-player type="button">新增选手</button></article>`).join('');
+  document.getElementById('teamsEditor').innerHTML = competitionState.teams.map((team, teamIndex) => `<article class="editor-card team-card" data-team-id="${escapeHtml(team.id)}"><header class="team-header"><label>队伍名称<input data-team-field="name" value="${escapeHtml(team.name)}"></label><div class="upload-field"><label>队伍图标<input id="team-emblem-${teamIndex}" data-team-field="emblem" value="${escapeHtml(team.emblem)}"></label><button class="button secondary" data-upload-target="team-emblem-${teamIndex}" type="button">上传</button></div><button class="button danger" data-remove-team type="button">删除队伍</button></header>${eliteExplorerEditorMarkup(team, teamIndex)}<div class="players">${team.players.map((player, playerIndex) => playerMarkup(player, teamIndex, playerIndex)).join('')}</div><button class="button secondary" data-add-player type="button">新增选手</button></article>`).join('');
 }
 
 /** 生成单个选手的结构化编辑表单。 */
 function playerMarkup(player, teamIndex, playerIndex) {
   const avatarId = `avatar-${teamIndex}-${playerIndex}`;
   const lineupId = `lineup-${teamIndex}-${playerIndex}`;
-  return `<article class="player-card" data-player-id="${escapeHtml(player.id)}"><header class="inline-tools"><strong>选手 ${playerIndex + 1}</strong><button class="button danger" data-remove-player type="button">删除选手</button></header><div class="player-grid"><label>选手编号<input data-player-field="id" value="${escapeHtml(player.id)}"></label><label>选手名称<input data-player-field="name" value="${escapeHtml(player.name)}"></label><div class="upload-field"><label>头像<input id="${avatarId}" data-player-field="avatar" value="${escapeHtml(player.avatar)}"></label><button class="button secondary" data-upload-target="${avatarId}" type="button">上传</button></div><label>初赛游戏结算分<input type="number" data-player-field="prelim" value="${Number(player.prelim || 0)}"></label><label>决赛游戏结算分<input type="number" data-player-field="final" value="${Number(player.final || 0)}"></label><label>分队倍率名称<input data-player-field="multiplier" value="${escapeHtml(player.multiplier)}"></label><label>完成结局（逗号分隔）<input data-player-field="endings" value="${escapeHtml((player.endings || []).join('、'))}"></label><label>开局主力<input data-player-field="starter" value="${escapeHtml(player.starter)}"></label><label>开局分队<input data-player-field="squad" value="${escapeHtml(player.squad)}"></label><label>干员抓位<input data-player-field="recruit" value="${escapeHtml(player.recruit)}"></label><label>提取余额<input data-player-field="extractionBalance" value="${escapeHtml(player.extractionBalance)}"></label><div class="upload-field"><label>阵容构筑图<input id="${lineupId}" data-player-field="lineupImage" value="${escapeHtml(player.lineupImage)}"></label><button class="button secondary" data-upload-target="${lineupId}" type="button">上传</button></div><label class="wide">规则加减分（类别|规则|分值，每行一项）<textarea data-player-field="scoreItems">${escapeHtml(stringifyScoreItems(player.scoreItems))}</textarea></label><label class="wide">扣分项目（类别|规则|分值，每行一项）<textarea data-player-field="deductions">${escapeHtml(stringifyScoreItems(player.deductions))}</textarea></label></div></article>`;
+  return `<article class="player-card" data-player-id="${escapeHtml(player.id)}"><header class="inline-tools"><strong>选手 ${playerIndex + 1}</strong><button class="button danger" data-remove-player type="button">删除选手</button></header><div class="player-grid"><label>选手编号<input data-player-field="id" value="${escapeHtml(player.id)}"></label><label>选手名称<input data-player-field="name" value="${escapeHtml(player.name)}"></label><div class="upload-field"><label>头像<input id="${avatarId}" data-player-field="avatar" value="${escapeHtml(player.avatar)}"></label><button class="button secondary" data-upload-target="${avatarId}" type="button">上传</button></div><label>初赛游戏结算分<input type="number" data-player-field="prelim" value="${Number(player.prelim || 0)}"></label><label>决赛游戏结算分<input type="number" data-player-field="final" value="${Number(player.final || 0)}"></label><label>分队倍率名称<input data-player-field="multiplier" value="${escapeHtml(player.multiplier)}"></label><label>完成结局（逗号分隔）<input data-player-field="endings" value="${escapeHtml((player.endings || []).join('、'))}"></label><label>开局主力<input data-player-field="starter" value="${escapeHtml(player.starter)}"></label><label>开局分队<input data-player-field="squad" value="${escapeHtml(player.squad)}"></label><label>初赛使用精英探索者<select data-player-field="eliteUsagePrelim">${eliteUsageOptions(player.eliteExplorerUsage?.prelim ?? null)}</select></label><label>决赛使用精英探索者<select data-player-field="eliteUsageFinal">${eliteUsageOptions(player.eliteExplorerUsage?.final ?? null)}</select></label><label>干员抓位<input data-player-field="recruit" value="${escapeHtml(player.recruit)}"></label><label>提取余额<input data-player-field="extractionBalance" value="${escapeHtml(player.extractionBalance)}"></label><div class="upload-field"><label>阵容构筑图<input id="${lineupId}" data-player-field="lineupImage" value="${escapeHtml(player.lineupImage)}"></label><button class="button secondary" data-upload-target="${lineupId}" type="button">上传</button></div><label class="wide">规则加减分（类别|规则|分值，每行一项）<textarea data-player-field="scoreItems">${escapeHtml(stringifyScoreItems(player.scoreItems))}</textarea></label><label class="wide">扣分项目（类别|规则|分值，每行一项）<textarea data-player-field="deductions">${escapeHtml(stringifyScoreItems(player.deductions))}</textarea></label></div></article>`;
 }
 
 /** 将基础表单内容写回内存中的赛事状态。 */
@@ -132,6 +168,7 @@ function collectPlayer(card) {
     starter: value('starter'),
     squad: value('squad'),
     recruit: value('recruit'),
+    eliteExplorerUsage: {prelim: eliteUsageFromInput(value('eliteUsagePrelim')), final: eliteUsageFromInput(value('eliteUsageFinal'))},
     extractionBalance: value('extractionBalance'),
     lineupImage: value('lineupImage'),
     scoreItems: parseScoreItems(value('scoreItems')),
@@ -145,8 +182,10 @@ function collectTeams() {
     id: card.dataset.teamId,
     name: card.querySelector('[data-team-field="name"]').value,
     emblem: card.querySelector('[data-team-field="emblem"]').value,
+    eliteExplorer: collectEliteExplorer(card),
     players: [...card.querySelectorAll('.player-card')].map(collectPlayer)
   }));
+  competitionState.teams.forEach(validateEliteExplorer);
 }
 
 /** 在上传接口中保存图片，并把返回路径写入目标字段。 */
@@ -226,7 +265,7 @@ function bindEditorEvents() {
   }));
   document.getElementById('addRuleSection').addEventListener('click', () => { competitionState.rules.sections.push({id: nextId('section', competitionState.rules.sections.map(item => item.id)), title: '新规则章节', paragraphs: [], items: [], callout: '', subsections: []}); renderRulesEditor(); });
   document.querySelectorAll('[data-add-day]').forEach(button => button.addEventListener('click', () => { competitionState.schedule[button.dataset.addDay].push({date: '待定', label: `${button.dataset.addDay === 'prelim' ? '初赛' : '决赛'} Day${competitionState.schedule[button.dataset.addDay].length + 1}`, playerIds: []}); renderScheduleStage(button.dataset.addDay); }));
-  document.getElementById('addTeam').addEventListener('click', () => { competitionState.teams.push({id: nextId('team', competitionState.teams.map(item => item.id)), name: '新队伍', emblem: '', players: []}); renderTeamsEditor(); });
+  document.getElementById('addTeam').addEventListener('click', () => { collectTeams(); competitionState.teams.push({id: nextId('team', competitionState.teams.map(item => item.id)), name: '新队伍', emblem: '', players: []}); renderTeamsEditor(); });
   document.body.addEventListener('click', event => {
     const button = event.target.closest('button');
     if (!button) return;
