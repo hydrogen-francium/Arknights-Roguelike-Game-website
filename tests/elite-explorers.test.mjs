@@ -127,7 +127,7 @@ test('服务端完整保存、公布与图标链路', { timeout: 15000 }, async 
     assert.ok(basename(workspace).startsWith('cockroach-elite-test-'));
     await rm(workspace, { recursive: true });
   });
-  for (const file of ['package.json', 'server.mjs', 'scoring.js', 'elite-explorers.js', 'six-star-operators.js', 'favicon.svg', 'index.html', 'admin.html']) await copyFile(join(root, file), join(workspace, file));
+  for (const file of ['package.json', 'server.mjs', 'scoring.js', 'elite-explorers.js', 'six-star-operators.js', 'favicon.png', 'index.html', 'admin.html']) await copyFile(join(root, file), join(workspace, file));
   await mkdir(join(workspace, 'data'));
   const state = JSON.parse(await readFile(join(root, 'data/competition.json'), 'utf8'));
   const baseline = state.teams[0].players.map(player => ({ prelim: getScoreComponents(player, 'prelim'), final: getScoreComponents(player, 'final') }));
@@ -158,10 +158,23 @@ test('服务端完整保存、公布与图标链路', { timeout: 15000 }, async 
   const schedule = await (await fetch(origin + '/api/public/schedule')).json();
   assert.equal(schedule.content.teams[0].eliteExplorer.operatorId, operator.id);
   assert.equal(Object.hasOwn(schedule.content.teams[0].players[0], 'eliteExplorerUsage'), false);
-  const icon = await fetch(origin + '/favicon.svg?v=test');
+  const icon = await fetch(origin + '/favicon.png?v=20261013-1');
   assert.equal(icon.status, 200);
-  assert.equal(icon.headers.get('content-type'), 'image/svg+xml');
-  assert.match(await icon.text(), /<svg/);
+  assert.equal(icon.headers.get('content-type'), 'image/png');
+  const iconBytes = Buffer.from(await icon.arrayBuffer());
+  assert.deepEqual(iconBytes, await readFile(join(root, 'favicon.png')));
+  assert.deepEqual(iconBytes.subarray(0, 8), Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
+  assert.equal(iconBytes.readUInt32BE(16), 59);
+  assert.equal(iconBytes.readUInt32BE(20), 59);
+  // 官网与后台必须引用同一新版图标，不能只更换文件而仍请求缓存的旧图标。
+  for (const path of ['/', '/admin']) {
+    const html = await (await fetch(origin + path)).text();
+    assert.match(html, /rel="icon" type="image\/png" sizes="59x59" href="\/favicon\.png\?v=20261013-1"/);
+    assert.doesNotMatch(html, /favicon\.svg/);
+  }
+  const dockerfile = await readFile(join(root, 'Dockerfile'), 'utf8');
+  assert.match(dockerfile, /COPY .*favicon\.png/);
+  assert.doesNotMatch(dockerfile, /favicon\.svg/);
   state.teams[0].eliteExplorer.operatorId = 'invalid';
   const invalid = await fetch(origin + '/api/admin/competition', { method: 'PUT', headers: { origin, cookie, 'content-type': 'application/json' }, body: JSON.stringify(state) });
   assert.equal(invalid.status, 500);
